@@ -20,5 +20,4 @@ public class LocalCraftsmanDTO {
     private String image;
     private String experience;
     private Region regions;
-    private Set<Product> products = new LinkedHashSet<>();
 }

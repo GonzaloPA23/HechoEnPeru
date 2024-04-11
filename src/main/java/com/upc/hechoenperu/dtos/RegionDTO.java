@@ -18,6 +18,4 @@ public class RegionDTO {
     private String history;
     private String sitesIntroduction;
     private String craftsmenIntroduction;
-    private Set<LocalCraftsman> localCraftsmen = new LinkedHashSet<>();
-    private Set<TouristSite> touristSites = new LinkedHashSet<>();
 }

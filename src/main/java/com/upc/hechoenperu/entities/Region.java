@@ -29,10 +29,4 @@ public class Region {
     @Column(name = "craftsmen_introduction", nullable = false, length = 200)
     private String craftsmenIntroduction;
 
-    @OneToMany(mappedBy = "regions")
-    private Set<LocalCraftsman> localCraftsmen = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "regions")
-    private Set<TouristSite> touristSites = new LinkedHashSet<>();
-
 }

@@ -19,7 +19,7 @@ public class LocalCraftsman {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(targetEntity = Region.class)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "regions_id", nullable = false)
     private Region regions;
@@ -38,8 +38,5 @@ public class LocalCraftsman {
 
     @Column(name = "experience", nullable = false, length = 50)
     private String experience;
-
-    @OneToMany(mappedBy = "localCraftsmen")
-    private Set<Product> products = new LinkedHashSet<>();
 
 }
