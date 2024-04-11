@@ -39,7 +39,7 @@ public class User {
 
     @Column(name = "password", nullable = false, length = 50)
     private String password;
-
+    
     @OneToMany(mappedBy = "users")
     private Set<Comment> comments = new LinkedHashSet<>();
 
