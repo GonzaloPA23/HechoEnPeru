@@ -16,7 +16,7 @@ public class TouristSite {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(targetEntity = Region.class)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "regions_id", nullable = false)
     private Region regions;
