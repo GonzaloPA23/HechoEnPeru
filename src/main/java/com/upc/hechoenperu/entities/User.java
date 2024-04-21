@@ -1,29 +1,22 @@
 package com.upc.hechoenperu.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.*;
 
 import java.time.Instant;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "roles_id", nullable = false)
-    private Role roles;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -32,18 +25,21 @@ public class User {
     private String lastName;
 
     @Column(name = "date_created")
-    private Instant dateCreated;
+    private Instant dateCreated = Instant.now();
 
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 50)
+    @Column(name = "password", nullable = false, length = 200)
     private String password;
-    
-    @OneToMany(mappedBy = "users")
-    private Set<Comment> comments = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "users")
-    private Set<Order> orders = new LinkedHashSet<>();
+    @Column(name = "enabled")
+    private Boolean enabled = true;
 
+    // LAZY = carga perezosa (cuando se necesite) EAGER = carga inmediata (siempre)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 }
