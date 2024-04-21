@@ -13,29 +13,20 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "products_id", nullable = false)
-    private Product products;
+    private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "users_id", nullable = false)
-    private User users;
-
-    @Column(name = "quantity_likes")
-    private Integer quantityLikes;
-
-    @Column(name = "quantity_dislikes")
-    private Integer quantityDislikes;
+    private User user;
 
     @Column(name = "rating", nullable = false)
     private Integer rating;
 
     @Column(name = "text_commentary", nullable = false, length = Integer.MAX_VALUE)
     private String textCommentary;
-
 }

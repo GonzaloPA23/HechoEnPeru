@@ -16,6 +16,6 @@ public class OrderDetailDTO {
     private Long id;
     private Integer quantity;
     private BigDecimal subTotal;
-    private Order orders;
-    private Product products;
+    private Order order;
+    private Product product;
 }

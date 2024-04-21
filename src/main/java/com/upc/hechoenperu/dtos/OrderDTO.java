@@ -18,6 +18,5 @@ public class OrderDTO {
     private Long id;
     private Instant dateCreated;
     private BigDecimal total;
-    private User users;
-    private Set<OrderDetail> orderDetails = new LinkedHashSet<>();
+    private User user;
 }

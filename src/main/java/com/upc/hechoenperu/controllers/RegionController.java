@@ -2,6 +2,7 @@ package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.RegionDTO;
 import com.upc.hechoenperu.entities.Region;
+import com.upc.hechoenperu.iservices.IRegionService;
 import com.upc.hechoenperu.services.RegionService;
 import com.upc.hechoenperu.util.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api") // http://localhost:8080/api
 public class RegionController {
     @Autowired
-    private RegionService regionService;
+    private IRegionService regionService;
     @Autowired
     private DTOConverter dtoConverter;
 

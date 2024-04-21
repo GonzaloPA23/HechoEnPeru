@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentDTO {
     private Long id;
-    private Integer quantityLikes;
-    private Integer quantityDislikes;
     private Integer rating;
     private String textCommentary;
-    private Product products;
-    private User users;
+    private Product product;
+    private User user;
 }

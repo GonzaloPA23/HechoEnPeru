@@ -16,13 +16,12 @@ import java.util.Set;
 public class LocalCraftsman {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
-    @ManyToOne(targetEntity = Region.class)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(targetEntity = Region.class, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "regions_id", nullable = false)
-    private Region regions;
+    private Region region;
 
     @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
@@ -38,5 +37,8 @@ public class LocalCraftsman {
 
     @Column(name = "experience", nullable = false, length = 50)
     private String experience;
+
+    @Column(name = "enabled")
+    private Boolean enabled = true;
 
 }

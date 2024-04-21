@@ -15,18 +15,16 @@ import java.math.BigDecimal;
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "orders_id", nullable = false)
-    private Order orders;
+    private Order order;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "products_id", nullable = false)
-    private Product products;
+    private Product product;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

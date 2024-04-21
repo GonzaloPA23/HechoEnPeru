@@ -15,6 +15,4 @@ import java.util.Set;
 public class CategoryDTO {
     private Long id;
     private String name;
-    private Instant dateCreated;
-    private Set<Product> products = new LinkedHashSet<>();
 }

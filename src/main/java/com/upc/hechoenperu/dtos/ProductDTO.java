@@ -18,8 +18,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class ProductDTO {
     private Long id;
-    private Category categories;
-    private LocalCraftsman localCraftsmen;
+    private Category category;
+    private LocalCraftsman localCraftsman;
     private String name;
     private String details;
     private String history;
@@ -28,6 +28,5 @@ public class ProductDTO {
     private Boolean availability;
     private Integer stock;
     private Float averageRating;
-    private Set<Comment> comments = new LinkedHashSet<>();
-    private Set<OrderDetail> orderDetails = new LinkedHashSet<>();
+    private Boolean enabled;
 }

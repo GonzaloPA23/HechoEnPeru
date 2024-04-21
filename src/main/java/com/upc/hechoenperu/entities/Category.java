@@ -15,16 +15,9 @@ import java.util.Set;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
-
-    @Column(name = "date_created")
-    private Instant dateCreated;
-
-    @OneToMany(mappedBy = "categories")
-    private Set<Product> products = new LinkedHashSet<>();
-
 }

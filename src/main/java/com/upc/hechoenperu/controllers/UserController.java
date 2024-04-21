@@ -1,7 +1,7 @@
 package com.upc.hechoenperu.controllers;
 import com.upc.hechoenperu.dtos.UserDTO;
 import com.upc.hechoenperu.entities.User;
-import com.upc.hechoenperu.services.UserService;
+import com.upc.hechoenperu.iservices.IUserService;
 import com.upc.hechoenperu.util.DTOConverter;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private IUserService userService;
     @Autowired
     private DTOConverter dtoConverter;
 

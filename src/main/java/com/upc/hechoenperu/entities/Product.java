@@ -20,18 +20,16 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "categories_id", nullable = false)
-    private Category categories;
+    private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,optional = false)
     @JoinColumn(name = "local_craftsmen_id", nullable = false)
-    private LocalCraftsman localCraftsmen;
+    private LocalCraftsman localCraftsman;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -58,12 +56,8 @@ public class Product {
     @Column(name = "average_rating")
     private Float averageRating;
 
-    @OneToMany(mappedBy = "products")
-    private Set<Comment> comments = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "products")
-    private Set<OrderDetail> orderDetails = new LinkedHashSet<>();
-
+    @Column(name = "enabled")
+    private Boolean enabled = true;
 }
 
 @Converter
