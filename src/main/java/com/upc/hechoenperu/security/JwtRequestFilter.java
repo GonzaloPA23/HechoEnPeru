@@ -1,6 +1,6 @@
 package com.upc.hechoenperu.security;
 
-import com.upc.hechoenperu.services.JwtUserDetailsService;
+import com.upc.hechoenperu.iservices.services.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

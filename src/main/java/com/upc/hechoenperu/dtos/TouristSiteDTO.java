@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TouristSiteDTO {
     private Long id;
-    private Region regions;
+    private Region region;
     private String description;
     private String image;
     private String name;

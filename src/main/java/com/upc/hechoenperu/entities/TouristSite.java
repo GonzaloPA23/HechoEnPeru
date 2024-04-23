@@ -19,7 +19,7 @@ public class TouristSite {
     @ManyToOne(targetEntity = Region.class)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "regions_id", nullable = false)
-    private Region regions;
+    private Region region;
 
     @Column(name = "description", nullable = false, length = 200)
     private String description;

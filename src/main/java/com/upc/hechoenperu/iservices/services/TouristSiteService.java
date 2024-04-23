@@ -1,4 +1,4 @@
-package com.upc.hechoenperu.services;
+package com.upc.hechoenperu.iservices.services;
 
 import com.upc.hechoenperu.entities.TouristSite;
 import com.upc.hechoenperu.iservices.ITouristSiteService;
@@ -14,10 +14,12 @@ public class TouristSiteService implements ITouristSiteService {
     private TouristSiteRepository touristSiteRepository;
 
     // Insert a new tourist site
+    @Override
     public TouristSite insert(TouristSite touristSite){
         return touristSiteRepository.save(touristSite);
     }
     // List all tourist sites
+    @Override
     public List<TouristSite> list(){
         return touristSiteRepository.findAll();
     }
@@ -26,11 +28,13 @@ public class TouristSiteService implements ITouristSiteService {
         return touristSiteRepository.findById(id).orElseThrow(() -> new Exception("Tourist site not found"));
     }
     // Update a tourist site
+    @Override
     public TouristSite update(TouristSite touristSite) throws Exception{
         searchId(touristSite.getId());
         return touristSiteRepository.save(touristSite);
     }
     // Delete a tourist site
+    @Override
     public void delete(Long id) throws Exception{
         touristSiteRepository.delete(searchId(id));
     }

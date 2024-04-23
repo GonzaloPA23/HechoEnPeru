@@ -7,12 +7,12 @@ import com.upc.hechoenperu.util.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api") // http://localhost:8080/api
 public class LocalCraftsmanController {
     @Autowired
@@ -21,6 +21,7 @@ public class LocalCraftsmanController {
     private DTOConverter dtoConverter;
 
     // Method Create Local Craftsman
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/localCraftsman") // http://localhost:8080/api/localCraftsman
     public ResponseEntity<LocalCraftsmanDTO> insert(@RequestBody LocalCraftsmanDTO localCraftsmanDTO){
         LocalCraftsman localCraftsman = dtoConverter.convertToEntity(localCraftsmanDTO, LocalCraftsman.class);
@@ -36,6 +37,7 @@ public class LocalCraftsmanController {
         return new ResponseEntity<>(localCraftsmanDTOs, HttpStatus.OK);
     }
     //Method Update Local Craftsman
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/localCraftsman") // http://localhost:8080/api/localCraftsman
     public ResponseEntity<LocalCraftsmanDTO> update(@RequestBody LocalCraftsmanDTO localCraftsmanDTO) throws Exception {
         LocalCraftsman localCraftsman = dtoConverter.convertToEntity(localCraftsmanDTO, LocalCraftsman.class);
