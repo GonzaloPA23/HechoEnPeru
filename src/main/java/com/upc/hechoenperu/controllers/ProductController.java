@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.util.List;
 
@@ -96,5 +97,53 @@ public class ProductController {
         Product product = productService.searchId(id);
         ProductDTO productDTO = dtoConverter.convertToDto(product, ProductDTO.class);
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
+    }
+
+    // Method Search Product by Price (startPrice <= price <= endPrice)
+    @GetMapping("/productsByPrice")
+    public ResponseEntity<List<ProductDTO>> findByPriceBetween(@RequestParam("startPrice") BigDecimal startPrice, @RequestParam("endPrice") BigDecimal endPrice) {
+        List<Product> products = productService.findByPriceBetween(startPrice, endPrice);
+        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    }
+
+    // Method Search Product by Category
+    @GetMapping("/productsByCategory")
+    public ResponseEntity<List<ProductDTO>> findByCategoryIdOrderBy(@RequestParam("categoryId") Long categoryId) {
+        List<Product> products = productService.findByCategoryId(categoryId);
+        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    }
+
+    // Method Search Product by Region
+    @GetMapping("/productsByRegion")
+    public ResponseEntity<List<ProductDTO>> findByRegionId(@RequestParam("regionId") Long regionId) {
+        List<Product> products = productService.findByRegionId(regionId);
+        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    }
+
+    // Method List Products by Price in Ascending Order
+    @GetMapping("/productsByPriceAsc")
+    public ResponseEntity<List<ProductDTO>> findAllByOrderByPriceAsc() {
+        List<Product> products = productService.findAllByOrderByPriceAsc();
+        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    }
+
+    // Method List Products by Price in Descending Order
+    @GetMapping("/productsByPriceDesc")
+    public ResponseEntity<List<ProductDTO>> findAllByOrderByPriceDesc() {
+        List<Product> products = productService.findAllByOrderByPriceDesc();
+        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    }
+
+    // Method List Products by Average Rating in Descending Order
+    @GetMapping("/productsByAverageRatingDesc")
+    public ResponseEntity<List<ProductDTO>> findAllByOrderByAverageRatingDesc() {
+        List<Product> products = productService.findAllByOrderByAverageRatingDesc();
+        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
     }
 }
