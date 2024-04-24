@@ -5,7 +5,7 @@ import com.upc.hechoenperu.entities.Product;
 import java.util.List;
 
 public interface IProductService {
-    Product save(Product product);
+    Product insert(Product product);
     List<Product> list();
     Product searchId(Long id) throws Exception;
     Product update(Product product) throws Exception;

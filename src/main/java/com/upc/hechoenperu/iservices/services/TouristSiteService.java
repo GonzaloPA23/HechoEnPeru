@@ -24,6 +24,7 @@ public class TouristSiteService implements ITouristSiteService {
         return touristSiteRepository.findAll();
     }
     // Search a tourist site by id
+    @Override
     public TouristSite searchId(Long id) throws Exception{
         return touristSiteRepository.findById(id).orElseThrow(() -> new Exception("Tourist site not found"));
     }

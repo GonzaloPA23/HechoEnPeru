@@ -36,6 +36,8 @@ public class LocalCraftsmanService implements ILocalCrastmanService {
     // Delete a local craftsman
     @Override
     public void delete(Long id) throws Exception{
-        localCraftsmanRepository.delete(searchId(id));
+        LocalCraftsman localCraftsman = searchId(id);
+        localCraftsman.setEnabled(false);
+        localCraftsmanRepository.save(localCraftsman);
     }
 }

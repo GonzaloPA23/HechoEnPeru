@@ -24,7 +24,7 @@ public class ProductDTO {
     private String details;
     private String history;
     private BigDecimal price;
-    private List<String> images;
+    private String image;
     private Boolean availability;
     private Integer stock;
     private Float averageRating;

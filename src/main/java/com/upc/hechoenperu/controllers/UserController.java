@@ -29,6 +29,7 @@ public class UserController {
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/user")
     public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO) throws Exception {
         User user = dtoConverter.convertToEntity(userDTO, User.class);
@@ -37,6 +38,7 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
         userService.delete(id);

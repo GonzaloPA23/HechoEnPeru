@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,11 +26,12 @@ public class TouristSiteController {
     private IUploadFileService uploadFileService;
     @Autowired
     private DTOConverter dtoConverter;
-    // Method Create Tourist Site
 
+    // Method Create Tourist Site
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/touristSite") // http://localhost:8080/api/touristSite
-    public ResponseEntity<?> save(@ModelAttribute("touristSiteDTO") TouristSiteDTO touristSiteDTO,
-                                  @RequestParam("file") MultipartFile image) throws Exception{
+    public ResponseEntity<TouristSiteDTO> insert(@ModelAttribute("touristSiteDTO") TouristSiteDTO touristSiteDTO,
+                                                 @RequestParam("file") MultipartFile image) throws Exception{
         TouristSite touristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);
         if (!image.isEmpty()) {
             String uniqueFilename = uploadFileService.copy(image);
@@ -48,6 +50,7 @@ public class TouristSiteController {
         return new ResponseEntity<>(touristSiteDTOs, HttpStatus.OK);
     }
     //Method Update Tourist Site
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/touristSite/{id}") // http://localhost:8080/api/touristSite/1
     public ResponseEntity<TouristSiteDTO> update(@PathVariable Long id, @ModelAttribute TouristSiteDTO touristSiteDTO,
                                                  @RequestParam("file") MultipartFile image) throws Exception {

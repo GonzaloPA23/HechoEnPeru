@@ -14,7 +14,7 @@ public class ProductService implements IProductService {
     private ProductRepository productRepository;
 
     @Override
-    public Product save(Product product) {
+    public Product insert(Product product) {
         return productRepository.save(product);
     }
 
@@ -36,6 +36,8 @@ public class ProductService implements IProductService {
 
     @Override
     public void delete(Long id) throws Exception {
-        productRepository.delete(searchId(id));
+        Product product = searchId(id);
+        product.setEnabled(false);
+        productRepository.save(product);
     }
 }

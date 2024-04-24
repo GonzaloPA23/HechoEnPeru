@@ -16,6 +16,7 @@ public class RegionDTO {
     private Long id;
     private String name;
     private String history;
+    private String image;
     private String sitesIntroduction;
     private String craftsmenIntroduction;
 }

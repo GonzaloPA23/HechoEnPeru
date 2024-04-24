@@ -21,10 +21,10 @@ public class TouristSite {
     @JoinColumn(name = "regions_id", nullable = false)
     private Region region;
 
-    @Column(name = "description", nullable = false, length = 200)
+    @Column(name = "description", nullable = false, length = Integer.MAX_VALUE)
     private String description;
 
-    @Column(name = "image", nullable = false, length = 50)
+    @Column(name = "image", nullable = false, length = Integer.MAX_VALUE)
     private String image;
 
     @Column(name = "name", nullable = false, length = 50)

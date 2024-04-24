@@ -79,8 +79,10 @@ public class UserService implements IUserService {
         return userRepository.findById(id).orElseThrow(() -> new Exception("User not found"));
     }
     @Override
-    public void delete(Long id) throws Exception {
-        userRepository.delete(searchId(id));
+    public void delete(Long id) throws Exception{
+        User userinactive = searchId(id);
+        userinactive.setEnabled(false);
+        userRepository.save(userinactive);
     }
     @Override
     public JwtResponse login(String email, String password) {

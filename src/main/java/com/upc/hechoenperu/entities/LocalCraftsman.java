@@ -19,26 +19,27 @@ public class LocalCraftsman {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(targetEntity = Region.class, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(targetEntity = Region.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "regions_id", nullable = false)
     private Region region;
 
     @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
 
-    @Column(name = "description", nullable = false, length = 100)
+    @Column(name = "description", nullable = false, length = Integer.MAX_VALUE)
     private String description;
 
-    @Column(name = "specialty", nullable = false, length = 50)
+    @Column(name = "specialty", nullable = false, length = 100)
     private String specialty;
 
-    @Column(name = "image", nullable = false, length = 50)
+    @Column(name = "image", nullable = false, length = Integer.MAX_VALUE)
     private String image;
 
-    @Column(name = "experience", nullable = false, length = 50)
+    @Column(name = "experience", nullable = false, length = 100)
     private String experience;
 
     @Column(name = "enabled")
-    private Boolean enabled = true;
+    private Boolean enabled;
 
 }

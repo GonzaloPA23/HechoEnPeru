@@ -14,19 +14,22 @@ import java.util.Set;
 public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "history", nullable = false, length = 200)
+    @Column(name = "history", nullable = false, length = Integer.MAX_VALUE)
     private String history;
 
-    @Column(name = "sites_introduction", nullable = false, length = 200)
+    @Column(name = "image", nullable = false, length = Integer.MAX_VALUE)
+    private String image;
+
+    @Column(name = "sites_introduction", nullable = false, length = Integer.MAX_VALUE)
     private String sitesIntroduction;
 
-    @Column(name = "craftsmen_introduction", nullable = false, length = 200)
+    @Column(name = "craftsmen_introduction", nullable = false, length = Integer.MAX_VALUE)
     private String craftsmenIntroduction;
 
 }

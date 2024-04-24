@@ -39,4 +39,9 @@ public class RegionService implements IRegionService {
     public void delete(Long id) throws Exception{
         regionRepository.delete(searchId(id));
     }
+    // Search a region by name
+    @Override
+    public Region searchName(String name) throws Exception{
+        return regionRepository.findByName(name);
+    }
 }
