@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -43,5 +44,21 @@ public class UserController {
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
         userService.delete(id);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> searchId(@PathVariable Long id) {
+        UserDTO userDTO;
+        try {
+            User user = userService.searchId(id);
+            userDTO = dtoConverter.convertToDto(user, UserDTO.class);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        } catch (ResponseStatusException ex) {
+            // Capturar la excepción de ResponseStatusException y devolverla directamente
+            throw ex;
+        } catch (Exception ex) {
+            // Capturar cualquier otra excepción y devolver una respuesta personalizada
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
     }
 }

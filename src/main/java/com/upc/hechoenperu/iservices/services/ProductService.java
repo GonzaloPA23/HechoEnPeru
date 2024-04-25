@@ -1,5 +1,6 @@
 package com.upc.hechoenperu.iservices.services;
 
+import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
 import com.upc.hechoenperu.entities.Category;
 import com.upc.hechoenperu.entities.Product;
 import com.upc.hechoenperu.iservices.IProductService;
@@ -17,6 +18,8 @@ public class ProductService implements IProductService {
 
     @Override
     public Product insert(Product product) {
+        // setear el averageRating de null a 0
+        product.setAverageRating(0f);
         return productRepository.save(product);
     }
 
@@ -79,5 +82,10 @@ public class ProductService implements IProductService {
     @Override
     public List<Product> findAllByOrderByAverageRatingDesc() {
         return productRepository.findAllByOrderByAverageRatingDesc();
+    }
+
+    @Override
+    public List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating() {
+        return productRepository.findProductsByAverageRating();
     }
 }

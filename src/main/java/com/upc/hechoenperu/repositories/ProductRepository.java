@@ -1,5 +1,6 @@
 package com.upc.hechoenperu.repositories;
 
+import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
 import com.upc.hechoenperu.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,5 +29,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     List<Product> findAllByOrderByPriceDesc();
     // List products by average rating in descending order
     List<Product> findAllByOrderByAverageRatingDesc();
-
+    //SELECT average_rating, name FROM products
+    @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse(p.averageRating, p.name) FROM Product p")
+    List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating();
 }

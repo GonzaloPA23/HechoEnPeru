@@ -86,6 +86,10 @@ public class UserService implements IUserService {
     }
     @Override
     public JwtResponse login(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        if (!user.getEnabled()) {
+            throw new RuntimeException("User is not enabled");
+        }
         try {
             authenticate(email, password);
         } catch (Exception e) {
@@ -104,5 +108,13 @@ public class UserService implements IUserService {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
+    }
+    @Override
+    public User findUserById(Long id) {
+        if (userRepository.findUserById(id) == null
+                || !userRepository.findUserById(id).getEnabled()) {
+            throw new RuntimeException("User not found"); // If user is not found or is not enabled
+        }
+        return userRepository.findUserById(id);
     }
 }

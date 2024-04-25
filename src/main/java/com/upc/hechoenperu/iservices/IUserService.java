@@ -15,4 +15,5 @@ public interface IUserService {
     void delete(Long id) throws Exception;
     JwtResponse login(String email, String password);
     void authenticate(String username, String password) throws Exception;
+    User findUserById(Long id);
 }

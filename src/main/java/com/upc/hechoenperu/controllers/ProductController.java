@@ -1,6 +1,7 @@
 package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.ProductDTO;
+import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
 import com.upc.hechoenperu.entities.Product;
 import com.upc.hechoenperu.iservices.IProductService;
 import com.upc.hechoenperu.iservices.IUploadFileService;
@@ -145,5 +146,13 @@ public class ProductController {
         List<Product> products = productService.findAllByOrderByAverageRatingDesc();
         List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
         return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    }
+
+    // Method List Products by Average Rating
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/productsByAverageRating")
+    public ResponseEntity<List<ProductsByAverageRatingDTOResponse>> findProductsByAverageRating() {
+          List<ProductsByAverageRatingDTOResponse> products = productService.findProductsByAverageRating();
+          return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }

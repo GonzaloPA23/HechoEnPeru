@@ -16,11 +16,11 @@ public class Comment {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(targetEntity = Product.class)
     @JoinColumn(name = "products_id", nullable = false)
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "users_id", nullable = false)
     private User user;
 

@@ -1,5 +1,6 @@
 package com.upc.hechoenperu.iservices;
 
+import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
 import com.upc.hechoenperu.entities.Product;
 import org.springframework.data.repository.query.Param;
 
@@ -18,4 +19,5 @@ public interface IProductService {
     List<Product> findAllByOrderByPriceAsc();
     List<Product> findAllByOrderByPriceDesc();
     List<Product> findAllByOrderByAverageRatingDesc();
+    List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating();
 }
