@@ -18,11 +18,11 @@ public class OrderDetail {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(targetEntity = Order.class)
     @JoinColumn(name = "orders_id", nullable = false)
     private Order order;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(targetEntity = Product.class)
     @JoinColumn(name = "products_id", nullable = false)
     private Product product;
 

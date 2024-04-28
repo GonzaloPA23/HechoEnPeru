@@ -36,30 +36,30 @@ public class UserService implements IUserService {
 
     @Override
     public User insert(User user) {
-        // si el email ya existe
+        // If the email already exists
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email " + user.getEmail() + " already exists");
         }
-        // Si el email no existe se
+        // If the email does not exist
 
-        // encripta la contraseña
+        // encrypt the password
         String bcryptPassword = bcrypt.encode(user.getPassword());
 
-        // se establece la contraseña encriptada
+        // set the encrypted password
         user.setPassword(bcryptPassword);
 
-        // se establece el rol por defecto de USER
+        // set the user with role USER
         var roles = roleRepository.findByNameRole(Role.NameRole.USER);
 
-        // se establece el rol del usuario
+        // set the user with role USER
         user.setRoles((Collections.singleton(roles))); // establece un solo rol
 
-        // se guarda el usuario Y se retorna
+        //
         return userRepository.save(user);
     }
     @Override
     public List<User> list() {
-        return userRepository.findAll();
+        return userRepository.list();
     }
     @Override
     public User findByEmail(String email) {
@@ -71,8 +71,16 @@ public class UserService implements IUserService {
     }
     @Override
     public User update(User user) throws Exception {
-        searchId(user.getId());
-        return userRepository.save(user);
+        // si el usuario no existe o tiene el enabled en false lanza una excepción
+        if (userRepository.findById(user.getId()).isEmpty() || !userRepository.findById(user.getId()).get().getEnabled()) {
+            throw new Exception("User not found");
+        }
+        // Update the name, last name and password
+        User userUpdate = searchId(user.getId());
+        userUpdate.setName(user.getName());
+        userUpdate.setLastName(user.getLastName());
+        userUpdate.setPassword(bcrypt.encode(user.getPassword()));
+        return userRepository.save(userUpdate);
     }
     @Override
     public User searchId(Long id) throws Exception {

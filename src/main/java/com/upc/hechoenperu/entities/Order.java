@@ -21,12 +21,12 @@ public class Order {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "users_id", nullable = false)
     private User user;
 
     @Column(name = "date_created")
-    private Instant dateCreated;
+    private Instant dateCreated = Instant.now();
 
     @Column(name = "total", nullable = false)
     private BigDecimal total;

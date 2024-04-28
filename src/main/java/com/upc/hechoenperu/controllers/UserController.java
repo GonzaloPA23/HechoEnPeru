@@ -1,5 +1,6 @@
 package com.upc.hechoenperu.controllers;
 import com.upc.hechoenperu.dtos.UserDTO;
+import com.upc.hechoenperu.dtos.request.UpdateProfileRequestDTO;
 import com.upc.hechoenperu.entities.User;
 import com.upc.hechoenperu.iservices.IUserService;
 import com.upc.hechoenperu.util.DTOConverter;
@@ -21,7 +22,6 @@ public class UserController {
     @Autowired
     private DTOConverter dtoConverter;
 
-    // SOLO LOS USUARIOS CON ROL ADMIN PUEDEN ACCEDER A ESTOS ENDPOINTS
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> list() {
@@ -31,11 +31,13 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @PutMapping("/user")
-    public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO) throws Exception {
-        User user = dtoConverter.convertToEntity(userDTO, User.class);
+    @PutMapping("/userUpdate/{id}")
+    public ResponseEntity<UserDTO> update(@Valid @RequestBody UpdateProfileRequestDTO updateProfileRequest,
+                                          @PathVariable Long id) throws Exception {
+        User user = dtoConverter.convertToEntity(updateProfileRequest, User.class);
+        user.setId(id);
         user = userService.update(user);
-        userDTO = dtoConverter.convertToDto(user, UserDTO.class);
+        UserDTO userDTO = dtoConverter.convertToDto(user, UserDTO.class);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
@@ -50,14 +52,12 @@ public class UserController {
     public ResponseEntity<?> searchId(@PathVariable Long id) {
         UserDTO userDTO;
         try {
-            User user = userService.searchId(id);
+            User user = userService.findUserById(id);
             userDTO = dtoConverter.convertToDto(user, UserDTO.class);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
         } catch (ResponseStatusException ex) {
-            // Capturar la excepción de ResponseStatusException y devolverla directamente
             throw ex;
         } catch (Exception ex) {
-            // Capturar cualquier otra excepción y devolver una respuesta personalizada
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
     }

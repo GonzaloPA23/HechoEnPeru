@@ -56,7 +56,7 @@ public class JwtTokenUtil implements Serializable {
     //generate token for user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("nombre", "rosa");
+        claims.put("nombre", "Hecho en Perú");
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -75,5 +75,10 @@ public class JwtTokenUtil implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    //Obtener el id del usuario del token JWT
+    public Long getUserIdFromToken(String token) {
+        return Long.parseLong(getClaimFromToken(token, Claims::getId));
     }
 }

@@ -1,5 +1,4 @@
-package com.upc.hechoenperu.dtos;
-
+package com.upc.hechoenperu.dtos.response;
 
 import com.upc.hechoenperu.entities.Order;
 import com.upc.hechoenperu.entities.Product;
@@ -10,12 +9,12 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class OrderDetailDTO {
+@AllArgsConstructor
+public class OrderDetailsResponseDTO {
     private Long id;
-    private Integer quantity;
-    private BigDecimal subTotal;
     private Order order;
     private Product product;
+    private Integer quantity;
+    private BigDecimal subTotal;
 }
