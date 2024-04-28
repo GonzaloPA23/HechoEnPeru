@@ -32,49 +32,65 @@ public class ProductController {
     //Method Create Product
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/product")
-    public ResponseEntity<ProductDTO> insert(@ModelAttribute("productDTO") ProductDTO productDTO,
+    public ResponseEntity<?> insert(@ModelAttribute("productDTO") ProductDTO productDTO,
                                              @RequestParam("file") MultipartFile image) throws Exception {
-        Product product = dtoConverter.convertToEntity(productDTO, Product.class);
-        if (!image.isEmpty()) {
-            String uniqueFilename = uploadFileService.copy(image);
-            product.setImage(uniqueFilename);
+        try {
+            Product product = dtoConverter.convertToEntity(productDTO, Product.class);
+            if (!image.isEmpty()) {
+                String uniqueFilename = uploadFileService.copy(image);
+                product.setImage(uniqueFilename);
+            }
+            product = productService.insert(product);
+            productDTO = dtoConverter.convertToDto(product, ProductDTO.class);
+            return new ResponseEntity<>(productDTO, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        product = productService.insert(product);
-        productDTO = dtoConverter.convertToDto(product, ProductDTO.class);
-        return new ResponseEntity<>(productDTO, HttpStatus.CREATED);
     }
 
     //Method Read Product
     @GetMapping("/products")
-    public ResponseEntity<List<ProductDTO>> list(){
-        List<Product> products = productService.list();
-        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
-        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    public ResponseEntity<?> list(){
+        try{
+            List<Product> products = productService.list();
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //Method Update Product
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/product/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @ModelAttribute ProductDTO productDTO,
+    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute ProductDTO productDTO,
                                              @RequestParam("file") MultipartFile image) throws Exception {
-        Product product = dtoConverter.convertToEntity(productDTO, Product.class);
-        product.setId(id);
-        if (!image.isEmpty()) {
-            String uniqueFilename = uploadFileService.copy(image);
-            product.setImage(uniqueFilename);
+        try{
+            Product product = dtoConverter.convertToEntity(productDTO, Product.class);
+            product.setId(id);
+            if (!image.isEmpty()) {
+                String uniqueFilename = uploadFileService.copy(image);
+                product.setImage(uniqueFilename);
+            }
+            product = productService.update(product);
+            productDTO = dtoConverter.convertToDto(product, ProductDTO.class);
+            return new ResponseEntity<>(productDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        product = productService.update(product);
-        productDTO = dtoConverter.convertToDto(product, ProductDTO.class);
-        return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 
     //Method Delete Product
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/productDelete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        uploadFileService.delete(productService.searchId(id).getImage());
-        productService.delete(id);
-        return new ResponseEntity<>("Product deleted", HttpStatus.OK);
+        try{
+            uploadFileService.delete(productService.searchId(id).getImage());
+            productService.delete(id);
+            return new ResponseEntity<>("Product deleted", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     // Method Get for obtaining the image
@@ -94,65 +110,97 @@ public class ProductController {
 
     // Method Search Product by Id
     @GetMapping("/productDetails/{id}")
-    public ResponseEntity<ProductDTO> searchId(@PathVariable Long id) throws Exception {
-        Product product = productService.searchId(id);
-        ProductDTO productDTO = dtoConverter.convertToDto(product, ProductDTO.class);
-        return new ResponseEntity<>(productDTO, HttpStatus.OK);
+    public ResponseEntity<?> searchId(@PathVariable Long id) throws Exception {
+        try {
+            Product product = productService.searchId(id);
+            ProductDTO productDTO = dtoConverter.convertToDto(product, ProductDTO.class);
+            return new ResponseEntity<>(productDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Method Search Product by Price (startPrice <= price <= endPrice)
     @GetMapping("/productsByPrice")
-    public ResponseEntity<List<ProductDTO>> findByPriceBetween(@RequestParam("startPrice") BigDecimal startPrice, @RequestParam("endPrice") BigDecimal endPrice) {
-        List<Product> products = productService.findByPriceBetween(startPrice, endPrice);
-        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
-        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    public ResponseEntity<?> findByPriceBetween(@RequestParam("startPrice") BigDecimal startPrice, @RequestParam("endPrice") BigDecimal endPrice) {
+       try {
+           List<Product> products = productService.findByPriceBetween(startPrice, endPrice);
+           List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+           return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+       } catch (Exception e) {
+           return ResponseEntity.badRequest().body(e.getMessage());
+       }
     }
 
     // Method Search Product by Category
     @GetMapping("/productsByCategory")
-    public ResponseEntity<List<ProductDTO>> findByCategoryIdOrderBy(@RequestParam("categoryId") Long categoryId) {
-        List<Product> products = productService.findByCategoryId(categoryId);
-        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
-        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    public ResponseEntity<?> findByCategoryIdOrderBy(@RequestParam("categoryId") Long categoryId) {
+        try{
+            List<Product> products = productService.findByCategoryId(categoryId);
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Method Search Product by Region
     @GetMapping("/productsByRegion")
-    public ResponseEntity<List<ProductDTO>> findByRegionId(@RequestParam("regionId") Long regionId) {
-        List<Product> products = productService.findByRegionId(regionId);
-        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
-        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    public ResponseEntity<?> findByRegionId(@RequestParam("regionId") Long regionId) {
+        try{
+            List<Product> products = productService.findByRegionId(regionId);
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Method List Products by Price in Ascending Order
     @GetMapping("/productsByPriceAsc")
-    public ResponseEntity<List<ProductDTO>> findAllByOrderByPriceAsc() {
-        List<Product> products = productService.findAllByOrderByPriceAsc();
-        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
-        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    public ResponseEntity<?> findAllByOrderByPriceAsc() {
+        try{
+            List<Product> products = productService.findAllByOrderByPriceAsc();
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Method List Products by Price in Descending Order
     @GetMapping("/productsByPriceDesc")
-    public ResponseEntity<List<ProductDTO>> findAllByOrderByPriceDesc() {
-        List<Product> products = productService.findAllByOrderByPriceDesc();
-        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
-        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    public ResponseEntity<?> findAllByOrderByPriceDesc() {
+        try{
+            List<Product> products = productService.findAllByOrderByPriceDesc();
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Method List Products by Average Rating in Descending Order
     @GetMapping("/productsByAverageRatingDesc")
-    public ResponseEntity<List<ProductDTO>> findAllByOrderByAverageRatingDesc() {
-        List<Product> products = productService.findAllByOrderByAverageRatingDesc();
-        List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
-        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+    public ResponseEntity<?> findAllByOrderByAverageRatingDesc() {
+        try{
+            List<Product> products = productService.findAllByOrderByAverageRatingDesc();
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Method List Products by Average Rating
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/productsByAverageRating")
-    public ResponseEntity<List<ProductsByAverageRatingDTOResponse>> findProductsByAverageRating() {
-          List<ProductsByAverageRatingDTOResponse> products = productService.findProductsByAverageRating();
-          return new ResponseEntity<>(products, HttpStatus.OK);
+    public ResponseEntity<?> findProductsByAverageRating() {
+          try{
+              List<ProductsByAverageRatingDTOResponse> products = productService.findProductsByAverageRating();
+              return new ResponseEntity<>(products, HttpStatus.OK);
+          }catch (Exception e){
+              return ResponseEntity.badRequest().body(e.getMessage());
+          }
     }
 }

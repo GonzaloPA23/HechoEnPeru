@@ -3,7 +3,7 @@ package com.upc.hechoenperu.controllers;
 import com.upc.hechoenperu.dtos.CommentDTO;
 import com.upc.hechoenperu.dtos.response.QuantityCommentsByRegionDTOResponse;
 import com.upc.hechoenperu.entities.Comment;
-import com.upc.hechoenperu.iservices.services.CommentService;
+import com.upc.hechoenperu.iservices.ICommentService;
 import com.upc.hechoenperu.util.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,31 +17,43 @@ import java.util.List;
 @RequestMapping("/api")
 public class CommentController {
     @Autowired
-    private CommentService commentService;
+    private ICommentService commentService;
     @Autowired
     private DTOConverter dtoConverter;
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/comment")
-    public ResponseEntity<CommentDTO> insert(@RequestBody CommentDTO commentDTO){
-        Comment comment = dtoConverter.convertToEntity(commentDTO, Comment.class);
-        comment = commentService.insert(comment);
-        commentService.updateAverageRatingProduct(comment.getId());
-        commentDTO = dtoConverter.convertToDto(comment, CommentDTO.class);
-        return new ResponseEntity<>(commentDTO, HttpStatus.OK);
+    public ResponseEntity<?> insert(@RequestBody CommentDTO commentDTO){
+        try {
+            Comment comment = dtoConverter.convertToEntity(commentDTO, Comment.class);
+            comment = commentService.insert(comment);
+            commentService.updateAverageRatingProduct(comment.getId());
+            commentDTO = dtoConverter.convertToDto(comment, CommentDTO.class);
+            return new ResponseEntity<>(commentDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/comments")
-    public ResponseEntity<List<CommentDTO>> findByProductId(@RequestParam Long productId){
-        List<Comment> comments = commentService.findByProductId(productId);
-        List<CommentDTO> commentDTOS = comments.stream().map(comment -> dtoConverter.convertToDto(comment, CommentDTO.class)).toList();
-        return new ResponseEntity<>(commentDTOS, HttpStatus.OK);
+    public ResponseEntity<?> findByProductId(@RequestParam Long productId){
+        try {
+            List<Comment> comments = commentService.findByProductId(productId);
+            List<CommentDTO> commentDTOS = comments.stream().map(comment -> dtoConverter.convertToDto(comment, CommentDTO.class)).toList();
+            return new ResponseEntity<>(commentDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/commentsQuantityByRegion")
-    public ResponseEntity<List<QuantityCommentsByRegionDTOResponse>> quantityCommentsByRegion(){
-        List<QuantityCommentsByRegionDTOResponse> quantityCommentsByRegionDTOResponses = commentService.quantityCommentsByRegion();
-        return new ResponseEntity<>(quantityCommentsByRegionDTOResponses, HttpStatus.OK);
+    public ResponseEntity<?> quantityCommentsByRegion(){
+        try {
+            List<QuantityCommentsByRegionDTOResponse> quantityCommentsByRegionDTOResponses = commentService.quantityCommentsByRegion();
+            return new ResponseEntity<>(quantityCommentsByRegionDTOResponses, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

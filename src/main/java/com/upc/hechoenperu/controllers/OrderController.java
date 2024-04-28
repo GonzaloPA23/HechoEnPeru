@@ -12,7 +12,6 @@ import com.upc.hechoenperu.security.JwtTokenUtil;
 import com.upc.hechoenperu.util.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

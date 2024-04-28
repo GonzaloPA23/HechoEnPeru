@@ -7,6 +7,7 @@ import com.upc.hechoenperu.iservices.IProductService;
 import com.upc.hechoenperu.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,6 +18,7 @@ public class ProductService implements IProductService {
     private ProductRepository productRepository;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Product insert(Product product) {
         // setear el averageRating de null a 0
         product.setAverageRating(0f);
@@ -34,12 +36,14 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Product update(Product product) throws Exception {
         searchId(product.getId());
         return productRepository.save(product);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) throws Exception {
         Product product = searchId(id);
         product.setEnabled(false);

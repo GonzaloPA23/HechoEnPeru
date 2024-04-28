@@ -23,27 +23,40 @@ public class CategoryController {
     // Method Create Category
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/category")
-    public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO categoryDTO){
-        Category category = dtoConverter.convertToEntity(categoryDTO, Category.class);
-        category = categoryService.insert(category);
-        categoryDTO = dtoConverter.convertToDto(category, CategoryDTO.class);
-        return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
+    public ResponseEntity<?> insert(@RequestBody CategoryDTO categoryDTO){
+        try{
+            Category category = dtoConverter.convertToEntity(categoryDTO, Category.class);
+            category = categoryService.insert(category);
+            categoryDTO = dtoConverter.convertToDto(category, CategoryDTO.class);
+            return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     // Method Read Category
     @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDTO>> list(){
-        List<Category> categories = categoryService.list();
-        List<CategoryDTO> categoryDTOs = categories.stream().map(category -> dtoConverter.convertToDto(category, CategoryDTO.class)).toList();
-        return new ResponseEntity<>(categoryDTOs, HttpStatus.OK);
+    public ResponseEntity<?> list(){
+        try{
+            List<Category> categories = categoryService.list();
+            List<CategoryDTO> categoryDTOs = categories.stream().map(category -> dtoConverter.convertToDto(category, CategoryDTO.class)).toList();
+            return new ResponseEntity<>(categoryDTOs, HttpStatus.OK);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     //Method Update Category
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/category")
-    public ResponseEntity<CategoryDTO> update(@RequestBody CategoryDTO categoryDTO) throws Exception {
-        Category category = dtoConverter.convertToEntity(categoryDTO, Category.class);
-        category = categoryService.update(category);
-        categoryDTO = dtoConverter.convertToDto(category, CategoryDTO.class);
-        return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
+    public ResponseEntity<?> update(@RequestBody CategoryDTO categoryDTO) throws Exception {
+        try{
+            Category category = dtoConverter.convertToEntity(categoryDTO, Category.class);
+            category = categoryService.update(category);
+            categoryDTO = dtoConverter.convertToDto(category, CategoryDTO.class);
+            return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

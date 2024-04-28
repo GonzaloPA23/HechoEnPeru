@@ -30,55 +30,75 @@ public class RegionController {
     // Method Create Region
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/region") // http://localhost:8080/api/region
-    public ResponseEntity<RegionDTO> insert(@ModelAttribute("regionDTO") RegionDTO regionDTO,
+    public ResponseEntity<?> insert(@ModelAttribute("regionDTO") RegionDTO regionDTO,
                                             @RequestParam("file")MultipartFile image) throws Exception{
-        Region region = dtoConverter.convertToEntity(regionDTO, Region.class);
-        if (!image.isEmpty()) {
-            String uniqueFilename = uploadFileService.copy(image);
-            region.setImage(uniqueFilename);
+        try{
+            Region region = dtoConverter.convertToEntity(regionDTO, Region.class);
+            if (!image.isEmpty()) {
+                String uniqueFilename = uploadFileService.copy(image);
+                region.setImage(uniqueFilename);
+            }
+            region = regionService.insert(region);
+            regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
+            return new ResponseEntity<>(regionDTO, HttpStatus.CREATED);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        region = regionService.insert(region);
-        regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
-        return new ResponseEntity<>(regionDTO, HttpStatus.CREATED);
     }
 
     // Method Read Region
     @GetMapping("/regions") // http://localhost:8080/api/regions
-    public ResponseEntity<List<RegionDTO>> list(){
-        List<Region> regions = regionService.list();
-        List<RegionDTO> regionDTOs = regions.stream().map(region -> dtoConverter.convertToDto(region, RegionDTO.class)).toList();
-        return new ResponseEntity<>(regionDTOs, HttpStatus.OK);
+    public ResponseEntity<?> list(){
+        try{
+            List<Region> regions = regionService.list();
+            List<RegionDTO> regionDTOs = regions.stream().map(region -> dtoConverter.convertToDto(region, RegionDTO.class)).toList();
+            return new ResponseEntity<>(regionDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     //Method Update Region
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/region/{id}") // http://localhost:8080/api/region/1
-    public ResponseEntity<RegionDTO> update(@PathVariable Long id, @ModelAttribute RegionDTO regionDTO,
+    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute RegionDTO regionDTO,
                                             @RequestParam("file")MultipartFile image) throws Exception {
-        Region region = dtoConverter.convertToEntity(regionDTO, Region.class);
-        region.setId(id);
-        if (!image.isEmpty()) {
-            String uniqueFilename = uploadFileService.copy(image);
-            region.setImage(uniqueFilename);
+        try{
+            Region region = dtoConverter.convertToEntity(regionDTO, Region.class);
+            region.setId(id);
+            if (!image.isEmpty()) {
+                String uniqueFilename = uploadFileService.copy(image);
+                region.setImage(uniqueFilename);
+            }
+            region = regionService.update(region);
+            regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
+            return new ResponseEntity<>(regionDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        region = regionService.update(region);
-        regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
-        return new ResponseEntity<>(regionDTO, HttpStatus.OK);
     }
     //Method Delete Region
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/region/{id}") // http://localhost:8080/api/region/1
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception{
-        uploadFileService.delete(regionService.searchId(id).getImage());
-        regionService.delete(id);
-        return new ResponseEntity<>("Region deleted", HttpStatus.OK);
+        try {
+            uploadFileService.delete(regionService.searchId(id).getImage());
+            regionService.delete(id);
+            return new ResponseEntity<>("Region deleted", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     // Method Get Region by Id
     @GetMapping("/regionDetail/{id}") // http://localhost:8080/api/region/1
-    public ResponseEntity<RegionDTO> searchId(@PathVariable Long id) throws Exception {
-        Region region = regionService.searchId(id);
-        RegionDTO regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
-        return new ResponseEntity<>(regionDTO, HttpStatus.OK);
+    public ResponseEntity<?> searchId(@PathVariable Long id) throws Exception {
+        try{
+            Region region = regionService.searchId(id);
+            RegionDTO regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
+            return new ResponseEntity<>(regionDTO, HttpStatus.OK);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Method Get para obtener la imagen
@@ -98,9 +118,13 @@ public class RegionController {
     // Method Get Region by Name
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/regionSearch/{name}") // http://localhost:8080/api/regionName/Lima
-    public ResponseEntity<RegionDTO> searchName(@PathVariable String name) throws Exception {
-        Region region = regionService.searchName(name);
-        RegionDTO regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
-        return new ResponseEntity<>(regionDTO, HttpStatus.OK);
+    public ResponseEntity<?> searchName(@PathVariable String name) throws Exception {
+        try{
+            Region region = regionService.searchName(name);
+            RegionDTO regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
+            return new ResponseEntity<>(regionDTO, HttpStatus.OK);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

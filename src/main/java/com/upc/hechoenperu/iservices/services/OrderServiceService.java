@@ -12,6 +12,7 @@ import com.upc.hechoenperu.repositories.ProductRepository;
 import com.upc.hechoenperu.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,6 +27,7 @@ public class OrderServiceService implements IOrderService {
     private ProductRepository productRepository;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insert(Order order, List<OrderDetail> orderDetails) {
         BigDecimal total = BigDecimal.ZERO;
         for (OrderDetail orderDetail : orderDetails){
@@ -63,8 +65,6 @@ public class OrderServiceService implements IOrderService {
 
     @Override
     public List<OrderDetail> listOrderDetailsById(Long orderId, Long userId) {
-        // Si el orderId no pertenece al userId lanzar una excepción
-
         if (orderRepository.findByIdAndUserId(orderId, userId) == null) {
             throw new IllegalArgumentException("Order ID: " + orderId + " does not belong to User ID: " + userId);
         }

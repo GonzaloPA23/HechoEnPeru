@@ -24,28 +24,42 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> list() {
-        List<User> users = userService.list();
-        List<UserDTO> userDTOs = users.stream().map(user -> dtoConverter.convertToDto(user, UserDTO.class)).toList();
-        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+    public ResponseEntity<?> list() {
+        try {
+            List<User> users = userService.list();
+            List<UserDTO> userDTOs = users.stream().map(user -> dtoConverter.convertToDto(user, UserDTO.class)).toList();
+            return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/userUpdate/{id}")
-    public ResponseEntity<UserDTO> update(@Valid @RequestBody UpdateProfileRequestDTO updateProfileRequest,
+    public ResponseEntity<?> update(@Valid @RequestBody UpdateProfileRequestDTO updateProfileRequest,
                                           @PathVariable Long id) throws Exception {
-        User user = dtoConverter.convertToEntity(updateProfileRequest, User.class);
-        user.setId(id);
-        user = userService.update(user);
-        UserDTO userDTO = dtoConverter.convertToDto(user, UserDTO.class);
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        try{
+            User user = dtoConverter.convertToEntity(updateProfileRequest, User.class);
+            user.setId(id);
+            user = userService.update(user);
+            UserDTO userDTO = dtoConverter.convertToDto(user, UserDTO.class);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        userService.delete(id);
-        return new ResponseEntity<>("User deleted", HttpStatus.OK);
+        try {
+            userService.delete(id);
+            return new ResponseEntity<>("User deleted", HttpStatus.OK);
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @GetMapping("/user/{id}")
@@ -55,10 +69,8 @@ public class UserController {
             User user = userService.findUserById(id);
             userDTO = dtoConverter.convertToDto(user, UserDTO.class);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
-        } catch (ResponseStatusException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

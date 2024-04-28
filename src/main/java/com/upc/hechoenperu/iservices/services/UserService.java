@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,10 +36,11 @@ public class UserService implements IUserService {
     private JwtUserDetailsService userDetailsService;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public User insert(User user) {
         // If the email already exists
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email " + user.getEmail() + " already exists");
+            throw new IllegalArgumentException("The email " + user.getEmail() + " already exists");
         }
         // If the email does not exist
 
@@ -70,10 +72,11 @@ public class UserService implements IUserService {
         return userRepository.existsByEmail(email);
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public User update(User user) throws Exception {
-        // si el usuario no existe o tiene el enabled en false lanza una excepción
+        // If the user does not exist or is not enabled throw an exception
         if (userRepository.findById(user.getId()).isEmpty() || !userRepository.findById(user.getId()).get().getEnabled()) {
-            throw new Exception("User not found");
+            throw new IllegalArgumentException("User " + user.getId() + " not found");
         }
         // Update the name, last name and password
         User userUpdate = searchId(user.getId());
@@ -87,27 +90,31 @@ public class UserService implements IUserService {
         return userRepository.findById(id).orElseThrow(() -> new Exception("User not found"));
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) throws Exception{
         User userinactive = searchId(id);
         userinactive.setEnabled(false);
         userRepository.save(userinactive);
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public JwtResponse login(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (!user.getEnabled()) {
-            throw new RuntimeException("User is not enabled");
+            //throw new RuntimeException("User is not enabled");
+            throw new IllegalArgumentException("User " + user.getEmail() + " is not enabled");
         }
         try {
             authenticate(email, password);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException("Invalid credentials");
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         final String token = jwtTokenProvider.generateToken(userDetails);
         return new JwtResponse(token);
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void authenticate(String email, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -121,7 +128,7 @@ public class UserService implements IUserService {
     public User findUserById(Long id) {
         if (userRepository.findUserById(id) == null
                 || !userRepository.findUserById(id).getEnabled()) {
-            throw new RuntimeException("User not found"); // If user is not found or is not enabled
+            throw new IllegalArgumentException("User not found"); // If user is not found or is not enabled
         }
         return userRepository.findUserById(id);
     }

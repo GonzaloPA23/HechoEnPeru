@@ -5,6 +5,7 @@ import com.upc.hechoenperu.iservices.IRegionService;
 import com.upc.hechoenperu.repositories.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class RegionService implements IRegionService {
 
     // Insert a new region
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Region insert(Region region){
         return regionRepository.save(region);
     }
@@ -30,12 +32,14 @@ public class RegionService implements IRegionService {
     }
     // Update a region
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Region update(Region region) throws Exception{
         searchId(region.getId());
         return regionRepository.save(region);
     }
     // Delete a region
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) throws Exception{
         regionRepository.delete(searchId(id));
     }

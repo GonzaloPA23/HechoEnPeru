@@ -4,6 +4,7 @@ import com.upc.hechoenperu.iservices.IUploadFileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -28,6 +29,7 @@ public class UploadFileService implements IUploadFileService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String copy(MultipartFile file) throws IOException {
         // genera un nombre único para el archivo que se va a subir
         String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
@@ -40,6 +42,7 @@ public class UploadFileService implements IUploadFileService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean delete(String filename) {
         Path imagePath = Paths.get(UPLOADS_FOLDER, filename);
         try {

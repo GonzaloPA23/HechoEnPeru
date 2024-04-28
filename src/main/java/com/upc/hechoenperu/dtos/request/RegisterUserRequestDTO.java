@@ -28,6 +28,6 @@ public class RegisterUserRequestDTO {
     private String email;
 
     @NotEmpty(message = "La contraseña es requerida")
-    @Size(min = 2, message = "La contraseña debe tener por lo menos 7 caracteres")
+    @Size(min = 7, message = "La contraseña debe tener por lo menos 7 caracteres")
     private String password;
 }
