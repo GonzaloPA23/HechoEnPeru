@@ -1,5 +1,5 @@
 # the base image
-FROM openjdk:17-jdk
+FROM openjdk:17-jdk-slim
 
 # the JAR file path
 ARG JAR_FILE=target/*.jar

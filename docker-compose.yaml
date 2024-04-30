@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: 'docker-spring-postgres:latest'
+    image: 'docker-spring-boot-postgres:latest'
     build:
       context: .
     container_name: app
@@ -11,7 +11,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=@Goldenboy2310@
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/hechoenperu_backend
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/hechoenperu
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=@Goldenboy2310@
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
