@@ -1,13 +1,13 @@
 package com.upc.hechoenperu.iservices.services;
 
 import com.upc.hechoenperu.iservices.IUploadFileService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -17,7 +17,12 @@ import java.util.UUID;
 
 @Service
 public class UploadFileService implements IUploadFileService{
-    private final static String UPLOADS_FOLDER = "images";
+    //private final static String UPLOADS_FOLDER = "images";
+    private final String UPLOADS_FOLDER;
+
+    public UploadFileService(@Value("${uploads.folder:images}") String uploadsFolder) {
+        this.UPLOADS_FOLDER = uploadsFolder;
+    }
     @Override
     public Resource load(String filename) throws MalformedURLException{
         Path path = getPath(filename);
@@ -55,10 +60,13 @@ public class UploadFileService implements IUploadFileService{
         }
     }
 
-    public Path getPath(String filename) {
+    /*public Path getPath(String filename) {
         // retorna la ruta absoluta del archivo que se va a subir o bajar
         // con get obtenemos la ruta del directorio de carga y con resolve concatenamos el nombre del archivo
         // finalmente con toAbsolutePath obtenemos la ruta absoluta del archivo que incluirá el directorio raiz
         return Paths.get(UPLOADS_FOLDER).resolve(filename).toAbsolutePath(); // ejemplo Ruta del archivo: /ruta/a/la/carpeta/de/tu/proyecto/images/ejemplo.jpg
+    }*/
+    public Path getPath(String filename) {
+        return Paths.get(UPLOADS_FOLDER).resolve(filename).toAbsolutePath();
     }
 }

@@ -7,6 +7,8 @@ ARG JAR_FILE=target/*.jar
 # Copy the JAR file from the build context into the Docker image
 COPY ${JAR_FILE} backend.jar
 
+ENV UPLOADS_FOLDER=/app/uploads
+
 CMD apt-get update -y
 
 # Set the default command to run the Java application

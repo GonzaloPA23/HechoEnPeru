@@ -15,9 +15,12 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=@Goldenboy2310@
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - UPLOADS_FOLDER=/app/uploads
 
     ports:
       - "6868:8080"
+    volumes:
+      - uploads_data:/app/uploads
   db:
     image: postgres
     volumes:
@@ -32,3 +35,4 @@ services:
       - "5433:5432"
 volumes:
   db_data:
+  uploads_data:
