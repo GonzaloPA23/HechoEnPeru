@@ -10,6 +10,8 @@ import com.upc.hechoenperu.entities.OrderDetail;
 import com.upc.hechoenperu.iservices.services.OrderServiceService;
 import com.upc.hechoenperu.security.JwtTokenUtil;
 import com.upc.hechoenperu.util.DTOConverter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "Order")
 @RestController
 @RequestMapping("/api")
 public class OrderController {
@@ -30,6 +33,7 @@ public class OrderController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PreAuthorize("hasAuthority('USER')")
+    @Operation(summary = "Create a new order")
     @PostMapping("/order")
     public ResponseEntity<?> insert(@RequestBody OrderRequestDTO orderRequestDTO){
         try {
@@ -43,6 +47,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "List all orders")
     @GetMapping("/orders")
     public ResponseEntity<?> listOrderDetails(){
         try {
@@ -55,6 +60,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "List all orders by user id and order id")
     @GetMapping("/ordersDetails")
         public ResponseEntity<?> listOrderDetailsById(@Param("orderId") Long orderId, @Param("userId") Long userId){
         try {
@@ -67,6 +73,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "List quantity of products by region")
     @GetMapping("/productsQuantityByRegion")
     public ResponseEntity<?> quantityProductsByRegion(){
         try {
@@ -78,6 +85,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "List quantity of products by category")
     @GetMapping("/productsQuantityByCategory")
     public ResponseEntity<?> quantityProductsByCategory(){
         try {

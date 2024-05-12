@@ -5,6 +5,8 @@ import com.upc.hechoenperu.entities.Region;
 import com.upc.hechoenperu.iservices.IRegionService;
 import com.upc.hechoenperu.iservices.IUploadFileService;
 import com.upc.hechoenperu.util.DTOConverter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.MalformedURLException;
 import java.util.List;
 
+@Tag(name = "Region")
 @RestController
-@RequestMapping("/api") // http://localhost:8080/api
+@RequestMapping("/api")
 public class RegionController {
     @Autowired
     private IRegionService regionService;
@@ -29,7 +32,8 @@ public class RegionController {
 
     // Method Create Region
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/region") // http://localhost:8080/api/region
+    @Operation(summary = "Create a new region")
+    @PostMapping("/region")
     public ResponseEntity<?> insert(@ModelAttribute("regionDTO") RegionDTO regionDTO,
                                             @RequestParam("file")MultipartFile image) throws Exception{
         try{
@@ -47,7 +51,8 @@ public class RegionController {
     }
 
     // Method Read Region
-    @GetMapping("/regions") // http://localhost:8080/api/regions
+    @Operation(summary = "List all regions")
+    @GetMapping("/regions")
     public ResponseEntity<?> list(){
         try{
             List<Region> regions = regionService.list();
@@ -59,7 +64,8 @@ public class RegionController {
     }
     //Method Update Region
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/region/{id}") // http://localhost:8080/api/region/1
+    @Operation(summary = "Update a region by id")
+    @PutMapping("/region/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute RegionDTO regionDTO,
                                             @RequestParam("file")MultipartFile image) throws Exception {
         try{
@@ -78,7 +84,8 @@ public class RegionController {
     }
     //Method Delete Region
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/region/{id}") // http://localhost:8080/api/region/1
+    @Operation(summary = "Delete a region by id")
+    @DeleteMapping("/region/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception{
         try {
             uploadFileService.delete(regionService.searchId(id).getImage());
@@ -90,7 +97,8 @@ public class RegionController {
     }
 
     // Method Get Region by Id
-    @GetMapping("/regionDetail/{id}") // http://localhost:8080/api/region/1
+    @Operation(summary = "List a region by id")
+    @GetMapping("/regionDetail/{id}")
     public ResponseEntity<?> searchId(@PathVariable Long id) throws Exception {
         try{
             Region region = regionService.searchId(id);
@@ -102,6 +110,7 @@ public class RegionController {
     }
 
     // Method Get para obtener la imagen
+    @Operation(summary = "Load image by filename")
     @GetMapping("/region/{filename}")
     public ResponseEntity<Resource> goImage(@PathVariable String filename) {
         Resource resource = null;
@@ -117,7 +126,8 @@ public class RegionController {
 
     // Method Get Region by Name
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/regionSearch/{name}") // http://localhost:8080/api/regionName/Lima
+    @Operation(summary = "Search a region by name")
+    @GetMapping("/regionSearch/{name}")
     public ResponseEntity<?> searchName(@PathVariable String name) throws Exception {
         try{
             Region region = regionService.searchName(name);

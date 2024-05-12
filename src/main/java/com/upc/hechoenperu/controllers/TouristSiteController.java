@@ -5,6 +5,8 @@ import com.upc.hechoenperu.entities.TouristSite;
 import com.upc.hechoenperu.iservices.ITouristSiteService;
 import com.upc.hechoenperu.iservices.IUploadFileService;
 import com.upc.hechoenperu.util.DTOConverter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.MalformedURLException;
 import java.util.List;
 
+@Tag(name = "Tourist Site")
 @RestController
-@RequestMapping("/api") // http://localhost:8080/api
+@RequestMapping("/api")
 public class TouristSiteController {
     @Autowired
     private ITouristSiteService touristSiteService;
@@ -29,7 +32,8 @@ public class TouristSiteController {
 
     // Method Create Tourist Site
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/touristSite") // http://localhost:8080/api/touristSite
+    @Operation(summary = "Create a new tourist site")
+    @PostMapping("/touristSite")
     public ResponseEntity<?> insert(@ModelAttribute("touristSiteDTO") TouristSiteDTO touristSiteDTO,
                                                  @RequestParam("file") MultipartFile image) throws Exception{
         try {
@@ -47,7 +51,8 @@ public class TouristSiteController {
     }
 
     // Method Read Tourist Site
-    @GetMapping("/touristSites") // http://localhost:8080/api/touristSites
+    @Operation(summary = "List all tourist sites")
+    @GetMapping("/touristSites")
     public ResponseEntity<?> list(){
         try {
             List<TouristSite> touristSites = touristSiteService.list();
@@ -59,7 +64,8 @@ public class TouristSiteController {
     }
     //Method Update Tourist Site
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/touristSite/{id}") // http://localhost:8080/api/touristSite/1
+    @Operation(summary = "Update a tourist site by id")
+    @PutMapping("/touristSite/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute TouristSiteDTO touristSiteDTO,
                                                  @RequestParam("file") MultipartFile image) throws Exception {
         try {
@@ -77,6 +83,7 @@ public class TouristSiteController {
         }
     }
     //Method Delete Tourist Site
+    @Operation(summary = "Delete a tourist site by id")
     @DeleteMapping("/touristSite/{id}") // http://localhost:8080/api/touristSite/1
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
         try{
@@ -89,6 +96,7 @@ public class TouristSiteController {
     }
 
     // Method Get para obtener la imagen
+    @Operation(summary = "Load image by filename")
     @GetMapping("/touristSite/{filename}")
     public ResponseEntity<Resource> goImage(@PathVariable String filename) {
         Resource resource = null;

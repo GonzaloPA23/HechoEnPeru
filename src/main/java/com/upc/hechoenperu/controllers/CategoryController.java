@@ -4,6 +4,8 @@ import com.upc.hechoenperu.dtos.CategoryDTO;
 import com.upc.hechoenperu.entities.Category;
 import com.upc.hechoenperu.iservices.ICategoryService;
 import com.upc.hechoenperu.util.DTOConverter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Category")
 @RestController
 @RequestMapping("/api")
 public class CategoryController {
@@ -21,7 +24,9 @@ public class CategoryController {
     private DTOConverter dtoConverter;
 
     // Method Create Category
+
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "Create a new category")
     @PostMapping("/category")
     public ResponseEntity<?> insert(@RequestBody CategoryDTO categoryDTO){
         try{
@@ -35,6 +40,7 @@ public class CategoryController {
     }
 
     // Method Read Category
+    @Operation(summary = "List all categories")
     @GetMapping("/categories")
     public ResponseEntity<?> list(){
         try{
@@ -48,6 +54,7 @@ public class CategoryController {
 
     //Method Update Category
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "Update a category")
     @PutMapping("/category")
     public ResponseEntity<?> update(@RequestBody CategoryDTO categoryDTO) throws Exception {
         try{

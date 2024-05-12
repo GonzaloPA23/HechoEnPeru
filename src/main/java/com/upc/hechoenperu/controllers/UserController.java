@@ -4,6 +4,8 @@ import com.upc.hechoenperu.dtos.request.UpdateProfileRequestDTO;
 import com.upc.hechoenperu.entities.User;
 import com.upc.hechoenperu.iservices.IUserService;
 import com.upc.hechoenperu.util.DTOConverter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Tag(name = "User")
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -23,6 +26,7 @@ public class UserController {
     private DTOConverter dtoConverter;
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "List all users")
     @GetMapping("/users")
     public ResponseEntity<?> list() {
         try {
@@ -35,6 +39,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
+    @Operation(summary = "Update user profile")
     @PutMapping("/userUpdate/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody UpdateProfileRequestDTO updateProfileRequest,
                                           @PathVariable Long id) throws Exception {
@@ -50,6 +55,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
+    @Operation(summary = "Delete account")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
         try {
@@ -62,6 +68,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Search user by id")
     @GetMapping("/user/{id}")
     public ResponseEntity<?> searchId(@PathVariable Long id) {
         UserDTO userDTO;

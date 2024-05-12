@@ -59,7 +59,14 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> {
-                authorize.requestMatchers("/api/auth/**","/api/**").permitAll();
+                authorize.requestMatchers(
+                        "/api/auth/**",
+                        "/api/**",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/error",
+                        "/favicon.ico"
+                ).permitAll();
                 authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
 

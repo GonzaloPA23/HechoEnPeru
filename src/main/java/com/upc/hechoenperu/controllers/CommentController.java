@@ -5,6 +5,8 @@ import com.upc.hechoenperu.dtos.response.QuantityCommentsByRegionDTOResponse;
 import com.upc.hechoenperu.entities.Comment;
 import com.upc.hechoenperu.iservices.ICommentService;
 import com.upc.hechoenperu.util.DTOConverter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Comment")
 @RestController
 @RequestMapping("/api")
 public class CommentController {
@@ -22,6 +25,7 @@ public class CommentController {
     private DTOConverter dtoConverter;
 
     @PreAuthorize("hasAuthority('USER')")
+    @Operation(summary = "Insert a new comment")
     @PostMapping("/comment")
     public ResponseEntity<?> insert(@RequestBody CommentDTO commentDTO){
         try {
@@ -35,6 +39,7 @@ public class CommentController {
         }
     }
 
+    @Operation(summary = "List all comments by product id")
     @GetMapping("/comments")
     public ResponseEntity<?> findByProductId(@RequestParam Long productId){
         try {
@@ -47,6 +52,7 @@ public class CommentController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "List quantity of comments by region")
     @GetMapping("/commentsQuantityByRegion")
     public ResponseEntity<?> quantityCommentsByRegion(){
         try {

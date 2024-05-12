@@ -7,6 +7,9 @@ import com.upc.hechoenperu.dtos.response.JwtResponse;
 import com.upc.hechoenperu.entities.User;
 import com.upc.hechoenperu.iservices.IUserService;
 import com.upc.hechoenperu.util.DTOConverter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@Tag(name = "Auth")
+@SecurityRequirements
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -25,6 +29,8 @@ public class AuthController {
     private IUserService userService;
     @Autowired
     private DTOConverter dtoConverter;
+
+    @Operation(summary = "Register a new user")
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserRequestDTO request) {
         try {
@@ -37,6 +43,7 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Login user")
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginUserRequestDTO request) {
         try{
