@@ -3,9 +3,11 @@ package com.upc.hechoenperu.iservices.services;
 import com.upc.hechoenperu.dtos.response.QuantityCommentsByRegionDTOResponse;
 import com.upc.hechoenperu.entities.Comment;
 import com.upc.hechoenperu.entities.Product;
+import com.upc.hechoenperu.entities.User;
 import com.upc.hechoenperu.iservices.ICommentService;
 import com.upc.hechoenperu.repositories.CommentRepository;
 import com.upc.hechoenperu.repositories.ProductRepository;
+import com.upc.hechoenperu.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +21,15 @@ public class CommentService implements ICommentService {
     private CommentRepository commentRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Comment insert(Comment comment) {
         Product product = productRepository.findById(comment.getProduct().getId()).orElse(null);
-        if (comment.getUser() == null || !comment.getUser().getEnabled()) {
+        User user = userRepository.findById(comment.getUser().getId()).orElse(null);
+        if (user == null || !user.getEnabled()) {
             throw new IllegalArgumentException("The user does not exist or is not active");
         }
         if (product == null || !product.getEnabled()) {
