@@ -9,7 +9,6 @@ import com.upc.hechoenperu.iservices.IOrderService;
 import com.upc.hechoenperu.repositories.OrderDetailRepository;
 import com.upc.hechoenperu.repositories.OrderRepository;
 import com.upc.hechoenperu.repositories.ProductRepository;
-import com.upc.hechoenperu.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class OrderServiceService implements IOrderService {
+public class OrderService implements IOrderService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -34,7 +33,12 @@ public class OrderServiceService implements IOrderService {
             Product product = productRepository.findById(orderDetail.getProduct().getId()).orElse(null);
             int quantity = orderDetail.getQuantity();
 
-            if (product == null || product.getStock() == null) {
+            assert product != null;
+            if (!product.getEnabled() || !product.getAvailability()) {
+                throw new IllegalArgumentException("Product is not available: " + product.getName());
+            }
+
+            if (product.getStock() == null) {
                 throw new IllegalArgumentException("Product stock is null for product with ID: " + orderDetail.getProduct().getId());
             }
 
@@ -54,6 +58,7 @@ public class OrderServiceService implements IOrderService {
             Product product = productRepository.findById(orderDetail.getProduct().getId()).orElse(null);
             assert product != null;
             product.setStock(product.getStock() - orderDetail.getQuantity());
+            if (product.getStock() == 0) product.setAvailability(false); // If stock is 0, set availability to false
             productRepository.save(product);
         }
     }

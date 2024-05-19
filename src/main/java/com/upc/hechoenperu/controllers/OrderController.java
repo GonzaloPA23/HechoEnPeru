@@ -7,7 +7,7 @@ import com.upc.hechoenperu.dtos.response.QuantityProductsByCategoryResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByRegionResponseDTO;
 import com.upc.hechoenperu.entities.Order;
 import com.upc.hechoenperu.entities.OrderDetail;
-import com.upc.hechoenperu.iservices.services.OrderServiceService;
+import com.upc.hechoenperu.iservices.services.OrderService;
 import com.upc.hechoenperu.security.JwtTokenUtil;
 import com.upc.hechoenperu.util.DTOConverter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class OrderController {
     @Autowired
-    private OrderServiceService orderService;
+    private OrderService orderService;
     @Autowired
     private DTOConverter dtoConverter;
     @Autowired
