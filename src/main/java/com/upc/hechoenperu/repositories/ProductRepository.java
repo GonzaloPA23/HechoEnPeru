@@ -32,4 +32,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     //SELECT average_rating, name FROM products
     @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse(p.averageRating, p.name) FROM Product p")
     List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating();
+    //SELECT * FROM products LIMIT 10 OFFSET 0;
+    @Query(value = "SELECT * FROM products OFFSET :offset LIMIT :limit", nativeQuery = true)
+    List<Product> listProductsByPage(int offset, int limit);
 }

@@ -43,7 +43,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @Column(name = "image", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "image", length = Integer.MAX_VALUE)
     private String image;
 
     @Column(name = "availability")

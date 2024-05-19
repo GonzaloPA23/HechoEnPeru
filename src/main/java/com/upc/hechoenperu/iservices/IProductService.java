@@ -12,6 +12,7 @@ public interface IProductService {
     List<Product> list();
     Product searchId(Long id) throws Exception;
     Product update(Product product) throws Exception;
+    Product updateProductWithValidations(Product product) throws Exception;
     void delete(Long id) throws Exception;
     List<Product> findByPriceBetween(BigDecimal startPrice, BigDecimal endPrice);
     List<Product> findByCategoryId(Long categoryId);
@@ -20,4 +21,5 @@ public interface IProductService {
     List<Product> findAllByOrderByPriceDesc();
     List<Product> findAllByOrderByAverageRatingDesc();
     List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating();
+    List<Product> listProductsByPage(int offset, int limit);
 }

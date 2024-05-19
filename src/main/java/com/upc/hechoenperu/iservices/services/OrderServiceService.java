@@ -22,7 +22,7 @@ public class OrderServiceService implements IOrderService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
-    private OrderDetailRepository orderDetailService;
+    private OrderDetailRepository orderDetailRepository;
     @Autowired
     private ProductRepository productRepository;
 
@@ -50,7 +50,7 @@ public class OrderServiceService implements IOrderService {
         orderRepository.save(order);
         for (OrderDetail orderDetail : orderDetails){
             orderDetail.setOrder(order);
-            orderDetailService.save(orderDetail);
+            orderDetailRepository.save(orderDetail);
             Product product = productRepository.findById(orderDetail.getProduct().getId()).orElse(null);
             assert product != null;
             product.setStock(product.getStock() - orderDetail.getQuantity());
@@ -60,7 +60,7 @@ public class OrderServiceService implements IOrderService {
 
     @Override
     public List<OrderDetail> listOrderDetails() {
-        return orderDetailService.findAll();
+        return orderDetailRepository.findAll();
     }
 
     @Override
@@ -69,16 +69,16 @@ public class OrderServiceService implements IOrderService {
             throw new IllegalArgumentException("Order ID: " + orderId + " does not belong to User ID: " + userId);
         }
 
-        return orderDetailService.findByOrderIdAndUserId(orderId, userId);
+        return orderDetailRepository.findByOrderIdAndUserId(orderId, userId);
     }
 
     @Override
     public List<QuantityProductsByRegionResponseDTO> quantityProductsByRegion() {
-        return orderDetailService.quantityProductsByRegion();
+        return orderDetailRepository.quantityProductsByRegion();
     }
 
     @Override
     public List<QuantityProductsByCategoryResponseDTO> quantityProductsByCategory() {
-        return orderDetailService.quantityProductsByCategory();
+        return orderDetailRepository.quantityProductsByCategory();
     }
 }

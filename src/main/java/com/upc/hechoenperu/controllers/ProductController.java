@@ -40,11 +40,12 @@ public class ProductController {
                                              @RequestParam("file") MultipartFile image) throws Exception {
         try {
             Product product = dtoConverter.convertToEntity(productDTO, Product.class);
+            product = productService.insert(product);
             if (!image.isEmpty()) {
                 String uniqueFilename = uploadFileService.copy(image);
                 product.setImage(uniqueFilename);
+                product = productService.update(product);
             }
-            product = productService.insert(product);
             productDTO = dtoConverter.convertToDto(product, ProductDTO.class);
             return new ResponseEntity<>(productDTO, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -69,23 +70,45 @@ public class ProductController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Update a product by id")
     @PutMapping("/product/{id}")
-        public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute ProductDTO productDTO,
-                                             @RequestParam("file") MultipartFile image) throws Exception {
-        try{
-            Product product = dtoConverter.convertToEntity(productDTO, Product.class);
-            product.setId(id);
-            if (!image.isEmpty()) {
-                String uniqueFilename = uploadFileService.copy(image);
-                product.setImage(uniqueFilename);
+    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute ProductDTO productDTO,
+                                    @RequestParam("file") MultipartFile image) throws Exception {
+        try {
+            // Busca el producto existente
+            Product product = productService.searchId(id);
+            if (product == null) {
+                return ResponseEntity.notFound().build();
             }
-            product = productService.update(product);
-            productDTO = dtoConverter.convertToDto(product, ProductDTO.class);
+
+            // Actualiza los campos del producto con los datos del DTO
+            Product updatedProduct = dtoConverter.convertToEntity(productDTO, Product.class);
+            updatedProduct.setId(id);
+
+            // Mantén el valor de averageRating del producto existente si el nuevo valor es nulo
+            if (productDTO.getAverageRating() == null) {
+                updatedProduct.setAverageRating(product.getAverageRating());
+            }
+
+            // Procesa la imagen solo si ha sido modificada
+            if (!image.isEmpty() && !product.getImage().equals(image.getOriginalFilename())) {
+                uploadFileService.delete(product.getImage());
+                String uniqueFilename = uploadFileService.copy(image);
+                updatedProduct.setImage(uniqueFilename);
+            } else {
+                // Mantén la imagen existente si no ha sido modificada
+                updatedProduct.setImage(product.getImage());
+            }
+
+            // Realiza la actualización del producto con validaciones
+            Product validatedProduct = productService.updateProductWithValidations(updatedProduct);
+
+            // Convierte el producto validado a DTO
+            productDTO = dtoConverter.convertToDto(validatedProduct, ProductDTO.class);
+
             return new ResponseEntity<>(productDTO, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
     //Method Delete Product
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Delete a product by id")
@@ -218,5 +241,18 @@ public class ProductController {
           }catch (Exception e){
               return ResponseEntity.badRequest().body(e.getMessage());
           }
+    }
+
+    // Method List Products by Page
+    @Operation(summary = "List products by page")
+    @GetMapping("/productsByPage")
+    public ResponseEntity<?> listProductsByPage(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+        try{
+            List<Product> products = productService.listProductsByPage(offset, limit);
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

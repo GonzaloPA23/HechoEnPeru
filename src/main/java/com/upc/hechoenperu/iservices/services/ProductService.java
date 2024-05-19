@@ -1,9 +1,10 @@
 package com.upc.hechoenperu.iservices.services;
 
 import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
-import com.upc.hechoenperu.entities.Category;
+import com.upc.hechoenperu.entities.LocalCraftsman;
 import com.upc.hechoenperu.entities.Product;
 import com.upc.hechoenperu.iservices.IProductService;
+import com.upc.hechoenperu.repositories.LocalCraftsmanRepository;
 import com.upc.hechoenperu.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,16 @@ import java.util.List;
 public class ProductService implements IProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private LocalCraftsmanRepository localCraftsmanRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Product insert(Product product) {
+        LocalCraftsman localCraftsman = localCraftsmanRepository.findById(product.getLocalCraftsman().getId()).orElse(null);
+        if (localCraftsman == null || !localCraftsman.getEnabled()) {
+            throw new IllegalArgumentException("The local craftsman does not exist or is not active");
+        }
         // setear el averageRating de null a 0
         product.setAverageRating(0f);
         return productRepository.save(product);
@@ -39,6 +46,21 @@ public class ProductService implements IProductService {
     @Transactional(rollbackFor = Exception.class)
     public Product update(Product product) throws Exception {
         searchId(product.getId());
+        return productRepository.save(product);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Product updateProductWithValidations(Product product) throws Exception {
+        searchId(product.getId());
+        LocalCraftsman localCraftsman = localCraftsmanRepository.findById(product.getLocalCraftsman().getId()).orElse(null);
+        if (localCraftsman == null || !localCraftsman.getEnabled()) {
+            throw new IllegalArgumentException("The local craftsman does not exist or is not active");
+        }
+        // si el producto no tiene un averageRating, se setea a 0 pero si ya tiene un valor, se mantiene el mismo
+        if (product.getAverageRating() == null) {
+            product.setAverageRating(0f);
+        }
         return productRepository.save(product);
     }
 
@@ -91,5 +113,10 @@ public class ProductService implements IProductService {
     @Override
     public List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating() {
         return productRepository.findProductsByAverageRating();
+    }
+
+    @Override
+    public List<Product> listProductsByPage(int offset, int limit) {
+        return productRepository.listProductsByPage(offset, limit);
     }
 }
