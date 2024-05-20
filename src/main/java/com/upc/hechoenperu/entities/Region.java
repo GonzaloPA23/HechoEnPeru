@@ -23,7 +23,7 @@ public class Region {
     @Column(name = "history", nullable = false, length = Integer.MAX_VALUE)
     private String history;
 
-    @Column(name = "image", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "image", length = Integer.MAX_VALUE)
     private String image;
 
     @Column(name = "sites_introduction", nullable = false, length = Integer.MAX_VALUE)

@@ -75,9 +75,6 @@ public class ProductController {
         try {
             // Busca el producto existente
             Product product = productService.searchId(id);
-            if (product == null) {
-                return ResponseEntity.notFound().build();
-            }
 
             // Actualiza los campos del producto con los datos del DTO
             Product updatedProduct = dtoConverter.convertToEntity(productDTO, Product.class);
@@ -134,6 +131,7 @@ public class ProductController {
             e.printStackTrace();
         }
 
+        assert resource != null;
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);

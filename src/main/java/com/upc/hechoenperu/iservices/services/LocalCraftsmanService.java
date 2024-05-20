@@ -1,8 +1,10 @@
 package com.upc.hechoenperu.iservices.services;
 
 import com.upc.hechoenperu.entities.LocalCraftsman;
+import com.upc.hechoenperu.entities.Region;
 import com.upc.hechoenperu.iservices.ILocalCrastmanService;
 import com.upc.hechoenperu.repositories.LocalCraftsmanRepository;
+import com.upc.hechoenperu.repositories.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,10 +15,13 @@ import java.util.List;
 public class LocalCraftsmanService implements ILocalCrastmanService {
     @Autowired
     private LocalCraftsmanRepository localCraftsmanRepository;
+    @Autowired
+    private RegionRepository regionRepository;
     // Insert a new local craftsman
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LocalCraftsman insert(LocalCraftsman localCraftsman){
+        validations(localCraftsman);
         return localCraftsmanRepository.save(localCraftsman);
     }
     // List all local craftsmen
@@ -36,6 +41,15 @@ public class LocalCraftsmanService implements ILocalCrastmanService {
         searchId(localCraftsman.getId());
         return localCraftsmanRepository.save(localCraftsman);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public LocalCraftsman updateWithValidations(LocalCraftsman localCraftsman) throws Exception{
+        searchId(localCraftsman.getId());
+        validations(localCraftsman);
+        return localCraftsmanRepository.save(localCraftsman);
+    }
+
     // Delete a local craftsman
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -43,5 +57,13 @@ public class LocalCraftsmanService implements ILocalCrastmanService {
         LocalCraftsman localCraftsman = searchId(id);
         localCraftsman.setEnabled(false);
         localCraftsmanRepository.save(localCraftsman);
+    }
+
+    public void validations(LocalCraftsman localCraftsman){
+        // si la region no existe, se lanza una excepcion
+        Region region = regionRepository.findById(localCraftsman.getRegion().getId()).orElse(null);
+        if(region == null){
+            throw new IllegalArgumentException("The region does not exist");
+        }
     }
 }

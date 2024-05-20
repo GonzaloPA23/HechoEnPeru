@@ -33,7 +33,7 @@ public class LocalCraftsman {
     @Column(name = "specialty", nullable = false, length = 100)
     private String specialty;
 
-    @Column(name = "image", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "image", length = Integer.MAX_VALUE)
     private String image;
 
     @Column(name = "experience", nullable = false, length = 100)

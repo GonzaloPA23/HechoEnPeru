@@ -37,12 +37,13 @@ public class RegionController {
     public ResponseEntity<?> insert(@ModelAttribute("regionDTO") RegionDTO regionDTO,
                                             @RequestParam("file")MultipartFile image) throws Exception{
         try{
-            Region region = dtoConverter.convertToEntity(regionDTO, Region.class);
+            Region region = dtoConverter.convertToEntity(regionDTO,Region.class);
+            region = regionService.insert(region);
             if (!image.isEmpty()) {
                 String uniqueFilename = uploadFileService.copy(image);
                 region.setImage(uniqueFilename);
+                region = regionService.update(region);
             }
-            region = regionService.insert(region);
             regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
             return new ResponseEntity<>(regionDTO, HttpStatus.CREATED);
         }catch (Exception e) {
@@ -69,14 +70,16 @@ public class RegionController {
     public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute RegionDTO regionDTO,
                                             @RequestParam("file")MultipartFile image) throws Exception {
         try{
-            Region region = dtoConverter.convertToEntity(regionDTO, Region.class);
-            region.setId(id);
-            if (!image.isEmpty()) {
+            Region region = regionService.searchId(id);
+            Region updateRegion = dtoConverter.convertToEntity(regionDTO, Region.class);
+            updateRegion.setId(region.getId());
+            if (!image.isEmpty() && !region.getImage().equals(image.getOriginalFilename())) {
+                uploadFileService.delete(region.getImage());
                 String uniqueFilename = uploadFileService.copy(image);
-                region.setImage(uniqueFilename);
+                updateRegion.setImage(uniqueFilename);
             }
-            region = regionService.update(region);
-            regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
+            Region validatedRegion = regionService.update(updateRegion);
+            regionDTO = dtoConverter.convertToDto(validatedRegion, RegionDTO.class);
             return new ResponseEntity<>(regionDTO, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -119,6 +122,7 @@ public class RegionController {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        assert resource != null;
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);

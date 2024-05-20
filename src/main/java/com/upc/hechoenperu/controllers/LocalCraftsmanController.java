@@ -21,7 +21,7 @@ import java.util.List;
 
 @Tag(name = "Local Craftsman")
 @RestController
-@RequestMapping("/api") // http://localhost:8080/api
+@RequestMapping("/api")
 public class LocalCraftsmanController {
     @Autowired
     private ILocalCrastmanService localCraftsmanService;
@@ -39,11 +39,12 @@ public class LocalCraftsmanController {
 
         try {
             LocalCraftsman localCraftsman = dtoConverter.convertToEntity(localCraftsmanDTO, LocalCraftsman.class);
+            localCraftsman = localCraftsmanService.insert(localCraftsman);
             if (!image.isEmpty()) {
                 String uniqueFilename = uploadFileService.copy(image);
                 localCraftsman.setImage(uniqueFilename);
+                localCraftsman = localCraftsmanService.update(localCraftsman);
             }
-            localCraftsman = localCraftsmanService.insert(localCraftsman);
             localCraftsmanDTO = dtoConverter.convertToDto(localCraftsman, LocalCraftsmanDTO.class);
             return new ResponseEntity<>(localCraftsmanDTO, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -69,14 +70,19 @@ public class LocalCraftsmanController {
     public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute LocalCraftsmanDTO localCraftsmanDTO,
                                                     @RequestParam("file") MultipartFile image) throws Exception {
         try{
-            LocalCraftsman localCraftsman = dtoConverter.convertToEntity(localCraftsmanDTO, LocalCraftsman.class);
-            localCraftsman.setId(id);
-            if (!image.isEmpty()) {
+            LocalCraftsman localCraftsman = localCraftsmanService.searchId(id);
+            LocalCraftsman updateLocalCraftsman = dtoConverter.convertToEntity(localCraftsmanDTO, LocalCraftsman.class);
+            updateLocalCraftsman.setId(localCraftsman.getId());
+
+            if (!image.isEmpty() && !localCraftsman.getImage().equals(image.getOriginalFilename())) {
+                uploadFileService.delete(localCraftsman.getImage());
                 String uniqueFilename = uploadFileService.copy(image);
-                localCraftsman.setImage(uniqueFilename);
+                updateLocalCraftsman.setImage(uniqueFilename);
+            } else {
+                updateLocalCraftsman.setImage(localCraftsman.getImage());
             }
-            localCraftsman = localCraftsmanService.update(localCraftsman);
-            localCraftsmanDTO = dtoConverter.convertToDto(localCraftsman, LocalCraftsmanDTO.class);
+            LocalCraftsman validatedLocalCraftsman = localCraftsmanService.updateWithValidations(updateLocalCraftsman);
+            localCraftsmanDTO = dtoConverter.convertToDto(validatedLocalCraftsman, LocalCraftsmanDTO.class);
             return new ResponseEntity<>(localCraftsmanDTO, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -9,5 +9,6 @@ public interface ITouristSiteService {
     List<TouristSite> list();
     TouristSite searchId(Long id) throws Exception;
     TouristSite update(TouristSite touristSite) throws Exception;
+    TouristSite updateWithValidation(TouristSite touristSite);
     void delete(Long id) throws Exception;
 }

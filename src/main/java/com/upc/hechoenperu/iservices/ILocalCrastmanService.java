@@ -9,5 +9,6 @@ public interface ILocalCrastmanService {
     List<LocalCraftsman> list();
     LocalCraftsman searchId(Long id) throws Exception;
     LocalCraftsman update(LocalCraftsman localCraftsman) throws Exception;
+    LocalCraftsman updateWithValidations(LocalCraftsman localCraftsman) throws Exception;
     void delete(Long id) throws Exception;
 }

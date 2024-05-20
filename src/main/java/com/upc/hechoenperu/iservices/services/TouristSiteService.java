@@ -1,7 +1,9 @@
 package com.upc.hechoenperu.iservices.services;
 
+import com.upc.hechoenperu.entities.Region;
 import com.upc.hechoenperu.entities.TouristSite;
 import com.upc.hechoenperu.iservices.ITouristSiteService;
+import com.upc.hechoenperu.repositories.RegionRepository;
 import com.upc.hechoenperu.repositories.TouristSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +15,14 @@ import java.util.List;
 public class TouristSiteService implements ITouristSiteService {
     @Autowired
     private TouristSiteRepository touristSiteRepository;
+    @Autowired
+    private RegionRepository regionRepository;
 
     // Insert a new tourist site
     @Override
     @Transactional(rollbackFor = Exception.class)
     public TouristSite insert(TouristSite touristSite){
+        Validations(touristSite);
         return touristSiteRepository.save(touristSite);
     }
     // List all tourist sites
@@ -37,10 +42,25 @@ public class TouristSiteService implements ITouristSiteService {
         searchId(touristSite.getId());
         return touristSiteRepository.save(touristSite);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public TouristSite updateWithValidation(TouristSite touristSite){
+        Validations(touristSite);
+        return touristSiteRepository.save(touristSite);
+    }
+
     // Delete a tourist site
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) throws Exception{
         touristSiteRepository.delete(searchId(id));
+    }
+
+    public void Validations(TouristSite touristSite){
+        Region region = regionRepository.findById(touristSite.getRegion().getId()).orElse(null);
+        if(region == null){
+            throw new IllegalArgumentException("Region not found");
+        }
     }
 }

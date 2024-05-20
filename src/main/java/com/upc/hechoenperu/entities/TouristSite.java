@@ -24,7 +24,7 @@ public class TouristSite {
     @Column(name = "description", nullable = false, length = Integer.MAX_VALUE)
     private String description;
 
-    @Column(name = "image", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "image", length = Integer.MAX_VALUE)
     private String image;
 
     @Column(name = "name", nullable = false, length = 50)

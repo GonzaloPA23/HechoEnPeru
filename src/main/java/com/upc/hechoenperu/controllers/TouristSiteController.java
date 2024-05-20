@@ -38,11 +38,12 @@ public class TouristSiteController {
                                                  @RequestParam("file") MultipartFile image) throws Exception{
         try {
             TouristSite touristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);
+            touristSite = touristSiteService.insert(touristSite);
             if (!image.isEmpty()) {
                 String uniqueFilename = uploadFileService.copy(image);
                 touristSite.setImage(uniqueFilename);
+                touristSite = touristSiteService.update(touristSite);
             }
-            touristSite = touristSiteService.insert(touristSite);
             touristSiteDTO = dtoConverter.convertToDto(touristSite, TouristSiteDTO.class);
             return new ResponseEntity<>(touristSiteDTO, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -70,14 +71,20 @@ public class TouristSiteController {
                                                  @RequestParam("file") MultipartFile image) throws Exception {
         try {
             TouristSite touristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);
-            touristSite.setId(id);
-            if (!image.isEmpty()) {
+            TouristSite updateTouristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);
+            updateTouristSite.setId(touristSite.getId());
+
+            if (!image.isEmpty() && !touristSite.getImage().equals(image.getOriginalFilename())) {
+                uploadFileService.delete(touristSite.getImage());
                 String uniqueFilename = uploadFileService.copy(image);
-                touristSite.setImage(uniqueFilename);
+                updateTouristSite.setImage(uniqueFilename);
+            }else {
+                updateTouristSite.setImage(touristSite.getImage());
             }
-            touristSite = touristSiteService.update(touristSite);
-            touristSiteDTO = dtoConverter.convertToDto(touristSite, TouristSiteDTO.class);
+            TouristSite validatedTouristSite = touristSiteService.update(updateTouristSite);
+            touristSiteDTO = dtoConverter.convertToDto(validatedTouristSite, TouristSiteDTO.class);
             return new ResponseEntity<>(touristSiteDTO, HttpStatus.OK);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
