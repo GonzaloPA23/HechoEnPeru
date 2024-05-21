@@ -13,7 +13,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*")  // Puedes restringir esto a tus dominios específicos
+                        .allowedOrigins("http://localhost:4200")  // Puedes restringir esto a tus dominios específicos
                         .allowedMethods("DELETE", "GET", "POST", "PUT")
                         .allowedHeaders("x-requested-with", "authorization", "Content-Type", "Authorization", "credential", "X-XSRF-TOKEN")
                         .exposedHeaders("x-requested-with", "authorization", "Content-Type", "Authorization", "credential", "X-XSRF-TOKEN")

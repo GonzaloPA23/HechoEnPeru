@@ -54,7 +54,7 @@ public class RegionController {
 
     // Method Read Region
     @Operation(summary = "List all regions")
-    @GetMapping("/regions")
+    @GetMapping("/regions") // http://localhost:8080/api/regions
     public ResponseEntity<?> list(){
         try{
             List<Region> regions = regionService.list();
@@ -133,7 +133,7 @@ public class RegionController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Search a region by name")
     @GetMapping("/regionSearch/{name}")
-    public ResponseEntity<?> searchName(@PathVariable String name) throws Exception {
+    public ResponseEntity<?> searchName(@PathVariable String name) {
         try{
             Region region = regionService.searchName(name);
             RegionDTO regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
