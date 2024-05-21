@@ -1,7 +1,9 @@
 package com.upc.hechoenperu.repositories;
 
 import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
+import com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Product;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,7 +34,11 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     //SELECT average_rating, name FROM products
     @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse(p.averageRating, p.name) FROM Product p")
     List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating();
-    //SELECT * FROM products LIMIT 10 OFFSET 0;
-    @Query(value = "SELECT * FROM products OFFSET :offset LIMIT :limit", nativeQuery = true)
-    List<Product> listProductsByPage(int offset, int limit);
+    //SELECT * FROM products WHERE availability = true AND enabled = true OFFSET :offset LIMIT :limit
+    @Query("SELECT p FROM Product p WHERE p.availability = true AND p.enabled = true")
+    List<Product> listProductsByPageModeUser(Pageable pageable);
+    // SELECT products.id,products.name, c.name, r.name, lc.full_name, price,stock,average_rating, products.enabled, availability  FROM products JOIN categories c on c.id = products.categories_id JOIN local_craftsmen lc on products.local_craftsmen_id = lc.id JOIN regions r on lc.regions_id = r.id OFFSET :offset LIMIT :limit;
+    @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO(p.id, p.name, c.name, r.name, lc.fullName, p.price, p.stock, p.averageRating, p.enabled, p.availability) FROM Product p JOIN p.category c JOIN p.localCraftsman lc JOIN lc.region r")
+    List<ProductsByOffsetLimitResponseDTO> listProductsByPageModeAdmin(Pageable pageable);
+
 }

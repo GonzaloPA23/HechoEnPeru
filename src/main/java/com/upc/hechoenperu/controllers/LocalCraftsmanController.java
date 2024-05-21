@@ -1,6 +1,7 @@
 package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.LocalCraftsmanDTO;
+import com.upc.hechoenperu.dtos.response.LocalCraftsmenByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.LocalCraftsman;
 import com.upc.hechoenperu.iservices.ILocalCrastmanService;
 import com.upc.hechoenperu.iservices.IUploadFileService;
@@ -126,6 +127,29 @@ public class LocalCraftsmanController {
             LocalCraftsman localCraftsman = localCraftsmanService.searchId(id);
             LocalCraftsmanDTO localCraftsmanDTO = dtoConverter.convertToDto(localCraftsman, LocalCraftsmanDTO.class);
             return new ResponseEntity<>(localCraftsmanDTO, HttpStatus.OK);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "List local craftsmen by page mode user")
+    @GetMapping("/localCraftsmenByPageModeUser")
+    public ResponseEntity<?> listLocalCraftsmanByPageModeUser(@RequestParam int offset, @RequestParam int limit){
+        try{
+            List<LocalCraftsman> localCraftsmen = localCraftsmanService.listLocalCraftsmenByPageModeUser(offset, limit);
+            List<LocalCraftsmanDTO> localCraftsmanDTOs = localCraftsmen.stream().map(localCraftsman -> dtoConverter.convertToDto(localCraftsman, LocalCraftsmanDTO.class)).toList();
+            return new ResponseEntity<>(localCraftsmanDTOs, HttpStatus.OK);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "List local craftsmen by page mode admin")
+    @GetMapping("/localCraftsmenByPageModeAdmin")
+    public ResponseEntity<?> listLocalCraftsmanByPageModeAdmin(@RequestParam int offset, @RequestParam int limit){
+        try{
+            List<LocalCraftsmenByOffsetLimitResponseDTO> localCraftsmenByOffsetLimitResponseDTOS = localCraftsmanService.listLocalCraftsmenByPageModeAdmin(offset, limit);
+            return new ResponseEntity<>(localCraftsmenByOffsetLimitResponseDTOS, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

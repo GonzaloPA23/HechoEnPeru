@@ -1,12 +1,15 @@
 package com.upc.hechoenperu.iservices.services;
 
 import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
+import com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.LocalCraftsman;
 import com.upc.hechoenperu.entities.Product;
 import com.upc.hechoenperu.iservices.IProductService;
 import com.upc.hechoenperu.repositories.LocalCraftsmanRepository;
 import com.upc.hechoenperu.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -116,7 +119,14 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> listProductsByPage(int offset, int limit) {
-        return productRepository.listProductsByPage(offset, limit);
+    public List<Product> listProductsByPageModeUser(int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        return productRepository.listProductsByPageModeUser(pageable);
+    }
+
+    @Override
+    public List<ProductsByOffsetLimitResponseDTO> listProductsByPageModeAdmin(int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        return productRepository.listProductsByPageModeAdmin(pageable);
     }
 }

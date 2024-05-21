@@ -1,6 +1,7 @@
 package com.upc.hechoenperu.iservices.services;
 
 import com.upc.hechoenperu.dtos.response.JwtResponse;
+import com.upc.hechoenperu.dtos.response.UserByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Role;
 import com.upc.hechoenperu.entities.User;
 import com.upc.hechoenperu.iservices.IUserService;
@@ -8,6 +9,8 @@ import com.upc.hechoenperu.repositories.RoleRepository;
 import com.upc.hechoenperu.repositories.UserRepository;
 import com.upc.hechoenperu.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -131,5 +134,11 @@ public class UserService implements IUserService {
             throw new IllegalArgumentException("User not found"); // If user is not found or is not enabled
         }
         return userRepository.findUserById(id);
+    }
+
+    @Override
+    public List<UserByOffsetLimitResponseDTO> listUsersByPageModeAdmin(int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        return userRepository.listUsersByPageModeAdmin(pageable);
     }
 }

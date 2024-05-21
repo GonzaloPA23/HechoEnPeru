@@ -1,8 +1,8 @@
 package com.upc.hechoenperu.iservices;
 
 import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
+import com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Product;
-import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,5 +21,6 @@ public interface IProductService {
     List<Product> findAllByOrderByPriceDesc();
     List<Product> findAllByOrderByAverageRatingDesc();
     List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating();
-    List<Product> listProductsByPage(int offset, int limit);
+    List<Product> listProductsByPageModeUser(int offset, int limit);
+    List<ProductsByOffsetLimitResponseDTO> listProductsByPageModeAdmin(int offset, int limit);
 }

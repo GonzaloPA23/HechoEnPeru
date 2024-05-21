@@ -1,5 +1,6 @@
 package com.upc.hechoenperu.iservices.services;
 
+import com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByCategoryResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByRegionResponseDTO;
 import com.upc.hechoenperu.entities.Order;
@@ -10,6 +11,8 @@ import com.upc.hechoenperu.repositories.OrderDetailRepository;
 import com.upc.hechoenperu.repositories.OrderRepository;
 import com.upc.hechoenperu.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,5 +88,17 @@ public class OrderService implements IOrderService {
     @Override
     public List<QuantityProductsByCategoryResponseDTO> quantityProductsByCategory() {
         return orderDetailRepository.quantityProductsByCategory();
+    }
+
+    @Override
+    public List<Order> listOrdersByPageModeAdmin(int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        return orderRepository.listOrdersByPageModeAdmin(pageable);
+    }
+
+    @Override
+    public List<OrderDetailsByOffsetLimitResponseDTO> listOrderDetailsByOrderId(Long id, int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        return orderDetailRepository.listOrderDetailsByOrderId(id, pageable);
     }
 }

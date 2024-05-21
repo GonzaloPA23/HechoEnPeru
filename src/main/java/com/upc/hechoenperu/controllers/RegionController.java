@@ -1,6 +1,7 @@
 package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.RegionDTO;
+import com.upc.hechoenperu.dtos.response.RegionsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Region;
 import com.upc.hechoenperu.iservices.IRegionService;
 import com.upc.hechoenperu.iservices.IUploadFileService;
@@ -138,6 +139,29 @@ public class RegionController {
             RegionDTO regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
             return new ResponseEntity<>(regionDTO, HttpStatus.OK);
         }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "List all regions by page mode user")
+    @GetMapping("/regionsByPageUser")
+    public ResponseEntity<?> listRegionsByPageModeUser(@RequestParam int offset, @RequestParam int limit){
+        try{
+            List<Region> regions = regionService.listRegionsByPageModeUser(offset, limit);
+            List<RegionDTO> regionDTOs = regions.stream().map(region -> dtoConverter.convertToDto(region, RegionDTO.class)).toList();
+            return new ResponseEntity<>(regionDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "List all regions by page mode admin")
+    @GetMapping("/regionsByPageAdmin")
+    public ResponseEntity<?> listRegionsByPageModeAdmin(@RequestParam int offset, @RequestParam int limit){
+        try{
+            List<RegionsByOffsetLimitResponseDTO> regionDTOs = regionService.listRegionsByPageModeAdmin(offset, limit);
+            return new ResponseEntity<>(regionDTOs, HttpStatus.OK);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

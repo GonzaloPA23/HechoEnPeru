@@ -6,6 +6,8 @@ import com.upc.hechoenperu.iservices.ITouristSiteService;
 import com.upc.hechoenperu.repositories.RegionRepository;
 import com.upc.hechoenperu.repositories.TouristSiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +57,12 @@ public class TouristSiteService implements ITouristSiteService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) throws Exception{
         touristSiteRepository.delete(searchId(id));
+    }
+
+    @Override
+    public List<TouristSite> listTouristSitesByPage(int offset, int limit){
+        Pageable pageable = PageRequest.of(offset, limit);
+        return touristSiteRepository.listTouristSitesByPage(pageable);
     }
 
     public void Validations(TouristSite touristSite){

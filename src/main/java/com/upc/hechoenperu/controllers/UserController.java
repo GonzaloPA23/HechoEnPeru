@@ -1,6 +1,7 @@
 package com.upc.hechoenperu.controllers;
 import com.upc.hechoenperu.dtos.UserDTO;
 import com.upc.hechoenperu.dtos.request.UpdateProfileRequestDTO;
+import com.upc.hechoenperu.dtos.response.UserByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.User;
 import com.upc.hechoenperu.iservices.IUserService;
 import com.upc.hechoenperu.util.DTOConverter;
@@ -78,6 +79,17 @@ public class UserController {
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "List users by page mode admin")
+    @GetMapping("/usersByPageModeAdmin")
+    public ResponseEntity<?> listUsersByPageModeAdmin(@RequestParam int offset, @RequestParam int limit) {
+        try {
+            List<UserByOffsetLimitResponseDTO> userDTOs = userService.listUsersByPageModeAdmin(offset, limit);
+            return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 }

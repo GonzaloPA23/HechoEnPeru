@@ -2,6 +2,7 @@ package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.ProductDTO;
 import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
+import com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Product;
 import com.upc.hechoenperu.iservices.IProductService;
 import com.upc.hechoenperu.iservices.IUploadFileService;
@@ -137,7 +138,7 @@ public class ProductController {
                 .body(resource);
     }
 
-    // Method Search Product by Id
+    // Method Search Product by id
     @Operation(summary = "Search a product by id")
     @GetMapping("/productDetails/{id}")
     public ResponseEntity<?> searchId(@PathVariable Long id) throws Exception {
@@ -243,12 +244,24 @@ public class ProductController {
 
     // Method List Products by Page
     @Operation(summary = "List products by page")
-    @GetMapping("/productsByPage")
+    @GetMapping("/productsByPageModeUser")
     public ResponseEntity<?> listProductsByPage(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
         try{
-            List<Product> products = productService.listProductsByPage(offset, limit);
+            List<Product> products = productService.listProductsByPageModeUser(offset, limit);
             List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
             return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // Method List Active Products by Page
+    @Operation(summary = "List active products by page")
+    @GetMapping("/productsByPageModeAdmin")
+    public ResponseEntity<?> listProductsByPageModeAdmin(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+        try{
+            List<ProductsByOffsetLimitResponseDTO> products = productService.listProductsByPageModeAdmin(offset, limit);
+            return new ResponseEntity<>(products, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

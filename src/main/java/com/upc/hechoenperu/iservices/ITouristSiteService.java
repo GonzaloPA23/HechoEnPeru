@@ -11,4 +11,5 @@ public interface ITouristSiteService {
     TouristSite update(TouristSite touristSite) throws Exception;
     TouristSite updateWithValidation(TouristSite touristSite);
     void delete(Long id) throws Exception;
+    List<TouristSite> listTouristSitesByPage(int offset, int limit);
 }

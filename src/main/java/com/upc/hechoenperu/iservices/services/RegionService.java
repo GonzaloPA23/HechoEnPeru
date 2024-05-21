@@ -1,9 +1,12 @@
 package com.upc.hechoenperu.iservices.services;
 
+import com.upc.hechoenperu.dtos.response.RegionsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Region;
 import com.upc.hechoenperu.iservices.IRegionService;
 import com.upc.hechoenperu.repositories.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +50,17 @@ public class RegionService implements IRegionService {
     @Override
     public Region searchName(String name) throws Exception{
         return regionRepository.findByName(name);
+    }
+
+    @Override
+    public List<Region> listRegionsByPageModeUser(int offset, int limit){
+        Pageable pageable = PageRequest.of(offset, limit);
+        return regionRepository.listRegionsByPageModeUser(pageable);
+    }
+
+    @Override
+    public List<RegionsByOffsetLimitResponseDTO> listRegionsByPageModeAdmin(int offset, int limit){
+        Pageable pageable = PageRequest.of(offset, limit);
+        return regionRepository.listRegionsByPageModeAdmin(pageable);
     }
 }

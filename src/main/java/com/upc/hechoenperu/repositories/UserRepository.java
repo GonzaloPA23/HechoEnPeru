@@ -1,6 +1,8 @@
 package com.upc.hechoenperu.repositories;
 
+import com.upc.hechoenperu.dtos.response.UserByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,4 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
     User findUserById(Long id);
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r.nameRole = 'USER'")
     List<User> list();
+    //@Query(value = "SELECT users.id, name, last_name, email, r.name_role, date_created,enabled FROM users JOIN users_roles ur on users.id = ur.user_id JOIN roles r on ur.role_id = r.id OFFSET :offset LIMIT :limit", nativeQuery = true)
+    @Query("SELECT new com.upc.hechoenperu.dtos.response.UserByOffsetLimitResponseDTO(u.id, u.name, u.lastName, u.email, r.nameRole, u.dateCreated, u.enabled) FROM User u JOIN u.roles r")
+    List<UserByOffsetLimitResponseDTO> listUsersByPageModeAdmin(Pageable pageable);
 }

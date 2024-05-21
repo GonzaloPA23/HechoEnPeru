@@ -2,6 +2,7 @@ package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.request.OrderDetailRequestDTO;
 import com.upc.hechoenperu.dtos.request.OrderRequestDTO;
+import com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.dtos.response.OrderDetailsResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByCategoryResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByRegionResponseDTO;
@@ -103,5 +104,27 @@ public class OrderController {
             orderDetails.add(orderDetail);
         }
         return orderDetails;
+    }
+
+    @Operation(summary = "List all orders by page mode admin")
+    @GetMapping("/ordersByPageModeAdmin")
+    public ResponseEntity<?> listOrdersByPageModeAdmin(@Param("offset") int offset, @Param("limit") int limit){
+        try {
+            List<Order> orders = orderService.listOrdersByPageModeAdmin(offset, limit);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "List all order details by order id")
+    @GetMapping("/orderDetailsByOrderId")
+    public ResponseEntity<?> listOrderDetailsByOrderId(@Param("id") Long id, @Param("offset") int offset, @Param("limit") int limit){
+        try {
+            List<OrderDetailsByOffsetLimitResponseDTO> orderDetails = orderService.listOrderDetailsByOrderId(id, offset, limit);
+            return ResponseEntity.ok(orderDetails);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -1,8 +1,10 @@
 package com.upc.hechoenperu.repositories;
 
+import com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByCategoryResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByRegionResponseDTO;
 import com.upc.hechoenperu.entities.OrderDetail;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +38,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     //GROUP BY c.name;}
     @Query("SELECT NEW com.upc.hechoenperu.dtos.response.QuantityProductsByCategoryResponseDTO (SUM(od.quantity), c.name) FROM OrderDetail od JOIN od.product p JOIN p.category c GROUP BY c.name")
     List<QuantityProductsByCategoryResponseDTO> quantityProductsByCategory();
+
+    @Query("SELECT NEW com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO (od.id, od.quantity, od.subTotal, p.id) FROM OrderDetail od JOIN od.product p WHERE od.order.id = :id")
+    List<OrderDetailsByOffsetLimitResponseDTO> listOrderDetailsByOrderId(Long id, Pageable pageable);
 }

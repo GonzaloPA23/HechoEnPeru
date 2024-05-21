@@ -1,6 +1,7 @@
 package com.upc.hechoenperu.iservices;
 
 import com.upc.hechoenperu.dtos.response.JwtResponse;
+import com.upc.hechoenperu.dtos.response.UserByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.User;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface IUserService {
     JwtResponse login(String email, String password);
     void authenticate(String username, String password) throws Exception;
     User findUserById(Long id);
+    List<UserByOffsetLimitResponseDTO> listUsersByPageModeAdmin(int offset, int limit);
 }
