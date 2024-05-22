@@ -62,4 +62,16 @@ public class CommentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @Operation(summary = "List comments by page")
+    @GetMapping("/commentsByPage")
+    public ResponseEntity<?> listCommentsByPage(@RequestParam Long productId, @RequestParam int offset, @RequestParam int limit){
+        try {
+            List<Comment> comments = commentService.listCommentsByPage(productId, offset, limit);
+            List<CommentDTO> commentDTOS = comments.stream().map(comment -> dtoConverter.convertToDto(comment, CommentDTO.class)).toList();
+            return new ResponseEntity<>(commentDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

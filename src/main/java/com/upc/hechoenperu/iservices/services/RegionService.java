@@ -26,7 +26,7 @@ public class RegionService implements IRegionService {
     // List all regions
     @Override
     public List<Region> list(){
-        return regionRepository.findAll();
+        return regionRepository.findAllByOrderByNameAsc();
     }
     // Search a region by id
     @Override

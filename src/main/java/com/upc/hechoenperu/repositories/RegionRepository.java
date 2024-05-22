@@ -11,7 +11,8 @@ import java.util.List;
 
 @Repository
 public interface RegionRepository extends JpaRepository<Region, Long> {
-    // Find by name
+    // Ordenar por nombre en forma ascendente
+    List<Region> findAllByOrderByNameAsc();
     Region findByName(String name);
     // SELECT * FROM regions OFFSET :offset LIMIT :limit
     @Query("SELECT r FROM Region r")

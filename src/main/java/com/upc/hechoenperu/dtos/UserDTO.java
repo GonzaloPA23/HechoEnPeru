@@ -18,7 +18,6 @@ public class UserDTO {
     private String lastName;
     private Instant dateCreated;
     private String email;
-    private String password;
     private Boolean enabled;
     private Set<Role> roles = new HashSet<>();
 }

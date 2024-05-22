@@ -9,6 +9,8 @@ import com.upc.hechoenperu.repositories.CommentRepository;
 import com.upc.hechoenperu.repositories.ProductRepository;
 import com.upc.hechoenperu.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,5 +77,15 @@ public class CommentService implements ICommentService {
     @Override
     public List<QuantityCommentsByRegionDTOResponse> quantityCommentsByRegion() {
         return commentRepository.quantityCommentsByRegion();
+    }
+
+    @Override
+    public List<Comment> listCommentsByPage(Long productId, int offset, int limit){
+        if (productRepository.findById(productId).isEmpty() || !productRepository
+                .findById(productId).get().getEnabled()) {
+            throw new IllegalArgumentException("The product does not exist or is not active");
+        }
+        Pageable pageable = PageRequest.of(offset, limit);
+        return commentRepository.listCommentsByPage(productId, pageable);
     }
 }
