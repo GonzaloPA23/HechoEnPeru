@@ -36,7 +36,7 @@ public class AuthController {
         try {
             User user = dtoConverter.convertToEntity(request, User.class);
             user = userService.insert(user);
-            UserDTO userDTO = dtoConverter.convertToDto(user, UserDTO.class);
+            UserDTO userDTO = dtoConverter.convertToDto(user, UserDTO.class);   
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -13,7 +13,7 @@ import java.util.List;
 public interface RegionRepository extends JpaRepository<Region, Long> {
     // Ordenar por nombre en forma ascendente
     List<Region> findAllByOrderByNameAsc();
-    Region findByName(String name);
+    List<Region> findAllByNameContaining(String name);
     // SELECT * FROM regions OFFSET :offset LIMIT :limit
     @Query("SELECT r FROM Region r")
     List<Region> listRegionsByPageModeUser(Pageable pageable);

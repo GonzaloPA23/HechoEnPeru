@@ -135,9 +135,9 @@ public class RegionController {
     @GetMapping("/regionSearch/{name}")
     public ResponseEntity<?> searchName(@PathVariable String name) {
         try{
-            Region region = regionService.searchName(name);
-            RegionDTO regionDTO = dtoConverter.convertToDto(region, RegionDTO.class);
-            return new ResponseEntity<>(regionDTO, HttpStatus.OK);
+            List<Region> regions = regionService.findAllByNameContaining(name);
+            List<RegionDTO> regionsDTO = regions.stream().map(region -> dtoConverter.convertToDto(region, RegionDTO.class)).toList();
+            return new ResponseEntity<>(regionsDTO, HttpStatus.OK);
         }catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
