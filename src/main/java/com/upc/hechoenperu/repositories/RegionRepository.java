@@ -15,7 +15,7 @@ public interface RegionRepository extends JpaRepository<Region, Long> {
     List<Region> findAllByOrderByNameAsc();
     List<Region> findAllByNameContaining(String name);
     // SELECT * FROM regions OFFSET :offset LIMIT :limit
-    @Query("SELECT r FROM Region r")
+    @Query("SELECT r FROM Region r ORDER BY r.name ASC")
     List<Region> listRegionsByPageModeUser(Pageable pageable);
     //SELECT id,name,history FROM regions OFFSET :offset LIMIT :limit
     @Query("SELECT NEW com.upc.hechoenperu.dtos.response.RegionsByOffsetLimitResponseDTO (r.id, r.name, r.history) FROM Region r")

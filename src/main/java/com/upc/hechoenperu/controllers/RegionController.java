@@ -32,7 +32,7 @@ public class RegionController {
     private DTOConverter dtoConverter;
 
     // Method Create Region
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Create a new region")
     @PostMapping("/region")
     public ResponseEntity<?> insert(@ModelAttribute("regionDTO") RegionDTO regionDTO,
@@ -65,7 +65,7 @@ public class RegionController {
         }
     }
     //Method Update Region
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Update a region by id")
     @PutMapping("/region/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute RegionDTO regionDTO,
@@ -87,7 +87,7 @@ public class RegionController {
         }
     }
     //Method Delete Region
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Delete a region by id")
     @DeleteMapping("/region/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception{
