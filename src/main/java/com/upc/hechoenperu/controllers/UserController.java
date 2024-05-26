@@ -26,7 +26,7 @@ public class UserController {
     @Autowired
     private DTOConverter dtoConverter;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "List all users")
     @GetMapping("/users")
     public ResponseEntity<?> list() {
@@ -39,7 +39,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    //@PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "Update user profile")
     @PutMapping("/userUpdate/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody UpdateProfileRequestDTO updateProfileRequest,
@@ -55,7 +55,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    //@PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "Delete account")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
