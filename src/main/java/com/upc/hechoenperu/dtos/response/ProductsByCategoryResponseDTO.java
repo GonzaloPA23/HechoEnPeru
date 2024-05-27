@@ -1,6 +1,6 @@
 package com.upc.hechoenperu.dtos.response;
 
-public class ProductsByCategoryDTOResponse {
+public class ProductsByCategoryResponseDTO {
     private Long quantity;
     private String productName;
 }

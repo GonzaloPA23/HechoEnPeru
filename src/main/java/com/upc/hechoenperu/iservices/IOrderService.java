@@ -1,5 +1,6 @@
 package com.upc.hechoenperu.iservices;
 
+import com.upc.hechoenperu.dtos.response.BestSellingProductsResponseDTO;
 import com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByCategoryResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByRegionResponseDTO;
@@ -16,4 +17,5 @@ public interface IOrderService {
     List<QuantityProductsByCategoryResponseDTO> quantityProductsByCategory();
     List<Order> listOrdersByPageModeAdmin(int offset, int limit);
     List<OrderDetailsByOffsetLimitResponseDTO> listOrderDetailsByOrderId(Long id, int offset, int limit);
+    List<BestSellingProductsResponseDTO> bestSellingProducts(int offset, int limit);
 }

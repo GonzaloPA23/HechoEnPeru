@@ -1,6 +1,6 @@
 package com.upc.hechoenperu.iservices;
 
-import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
+import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingResponseDTO;
 import com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Product;
 
@@ -20,7 +20,7 @@ public interface IProductService {
     List<Product> findAllByOrderByPriceAsc();
     List<Product> findAllByOrderByPriceDesc();
     List<Product> findAllByOrderByAverageRatingDesc();
-    List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating();
+    List<ProductsByAverageRatingResponseDTO> findProductsByAverageRating();
     List<Product> listProductsByPageModeUser(int offset, int limit);
     List<ProductsByOffsetLimitResponseDTO> listProductsByPageModeAdmin(int offset, int limit);
 }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductsByAverageRatingDTOResponse {
-    private Float averageRating;
-    private String name;
+public class QuantityCommentsByRegionResponseDTO {
+    private String regionName;
+    private Long quantity;
 }

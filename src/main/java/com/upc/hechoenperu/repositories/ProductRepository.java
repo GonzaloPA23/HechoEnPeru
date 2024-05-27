@@ -1,6 +1,6 @@
 package com.upc.hechoenperu.repositories;
 
-import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
+import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingResponseDTO;
 import com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Product;
 import org.springframework.data.domain.Pageable;
@@ -32,8 +32,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     // List products by average rating in descending order
     List<Product> findAllByOrderByAverageRatingDesc();
     //SELECT average_rating, name FROM products
-    @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse(p.averageRating, p.name) FROM Product p")
-    List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating();
+    @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByAverageRatingResponseDTO(p.averageRating, p.name) FROM Product p")
+    List<ProductsByAverageRatingResponseDTO> findProductsByAverageRating();
     //SELECT * FROM products WHERE availability = true AND enabled = true OFFSET :offset LIMIT :limit
     @Query("SELECT p FROM Product p WHERE p.availability = true AND p.enabled = true")
     List<Product> listProductsByPageModeUser(Pageable pageable);

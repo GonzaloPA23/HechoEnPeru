@@ -1,6 +1,6 @@
 package com.upc.hechoenperu.iservices.services;
 
-import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
+import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingResponseDTO;
 import com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.LocalCraftsman;
 import com.upc.hechoenperu.entities.Product;
@@ -114,7 +114,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<ProductsByAverageRatingDTOResponse> findProductsByAverageRating() {
+    public List<ProductsByAverageRatingResponseDTO> findProductsByAverageRating() {
         return productRepository.findProductsByAverageRating();
     }
 

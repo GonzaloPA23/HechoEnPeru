@@ -1,7 +1,7 @@
 package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.CommentDTO;
-import com.upc.hechoenperu.dtos.response.QuantityCommentsByRegionDTOResponse;
+import com.upc.hechoenperu.dtos.response.QuantityCommentsByRegionResponseDTO;
 import com.upc.hechoenperu.entities.Comment;
 import com.upc.hechoenperu.iservices.ICommentService;
 import com.upc.hechoenperu.util.DTOConverter;
@@ -56,8 +56,8 @@ public class CommentController {
     @GetMapping("/commentsQuantityByRegion")
     public ResponseEntity<?> quantityCommentsByRegion(){
         try {
-            List<QuantityCommentsByRegionDTOResponse> quantityCommentsByRegionDTOResponses = commentService.quantityCommentsByRegion();
-            return new ResponseEntity<>(quantityCommentsByRegionDTOResponses, HttpStatus.OK);
+            List<QuantityCommentsByRegionResponseDTO> quantityCommentsByRegionResponsDTOS = commentService.quantityCommentsByRegion();
+            return new ResponseEntity<>(quantityCommentsByRegionResponsDTOS, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -1,6 +1,6 @@
 package com.upc.hechoenperu.iservices.services;
 
-import com.upc.hechoenperu.dtos.response.QuantityCommentsByRegionDTOResponse;
+import com.upc.hechoenperu.dtos.response.QuantityCommentsByRegionResponseDTO;
 import com.upc.hechoenperu.entities.Comment;
 import com.upc.hechoenperu.entities.Product;
 import com.upc.hechoenperu.entities.User;
@@ -75,7 +75,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public List<QuantityCommentsByRegionDTOResponse> quantityCommentsByRegion() {
+    public List<QuantityCommentsByRegionResponseDTO> quantityCommentsByRegion() {
         return commentRepository.quantityCommentsByRegion();
     }
 

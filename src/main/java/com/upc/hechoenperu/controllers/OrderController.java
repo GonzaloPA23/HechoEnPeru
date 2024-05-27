@@ -2,10 +2,7 @@ package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.request.OrderDetailRequestDTO;
 import com.upc.hechoenperu.dtos.request.OrderRequestDTO;
-import com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO;
-import com.upc.hechoenperu.dtos.response.OrderDetailsResponseDTO;
-import com.upc.hechoenperu.dtos.response.QuantityProductsByCategoryResponseDTO;
-import com.upc.hechoenperu.dtos.response.QuantityProductsByRegionResponseDTO;
+import com.upc.hechoenperu.dtos.response.*;
 import com.upc.hechoenperu.entities.Order;
 import com.upc.hechoenperu.entities.OrderDetail;
 import com.upc.hechoenperu.iservices.services.OrderService;
@@ -123,6 +120,17 @@ public class OrderController {
         try {
             List<OrderDetailsByOffsetLimitResponseDTO> orderDetails = orderService.listOrderDetailsByOrderId(id, offset, limit);
             return ResponseEntity.ok(orderDetails);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "List best selling products")
+    @GetMapping("/bestSellingProducts")
+    public ResponseEntity<?> bestSellingProducts(@Param("offset") int offset, @Param("limit") int limit){
+        try {
+            List<BestSellingProductsResponseDTO> bestSellingProductsResponseDTOS = orderService.bestSellingProducts(offset, limit);
+            return ResponseEntity.ok(bestSellingProductsResponseDTOS);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

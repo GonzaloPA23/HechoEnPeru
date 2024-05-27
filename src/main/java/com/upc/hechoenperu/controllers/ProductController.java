@@ -1,7 +1,7 @@
 package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.ProductDTO;
-import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingDTOResponse;
+import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingResponseDTO;
 import com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Product;
 import com.upc.hechoenperu.iservices.IProductService;
@@ -235,7 +235,7 @@ public class ProductController {
     @GetMapping("/productsByAverageRating")
     public ResponseEntity<?> findProductsByAverageRating() {
           try{
-              List<ProductsByAverageRatingDTOResponse> products = productService.findProductsByAverageRating();
+              List<ProductsByAverageRatingResponseDTO> products = productService.findProductsByAverageRating();
               return new ResponseEntity<>(products, HttpStatus.OK);
           }catch (Exception e){
               return ResponseEntity.badRequest().body(e.getMessage());
