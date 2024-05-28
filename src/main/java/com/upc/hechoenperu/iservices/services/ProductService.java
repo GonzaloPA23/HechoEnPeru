@@ -129,4 +129,10 @@ public class ProductService implements IProductService {
         Pageable pageable = PageRequest.of(offset, limit);
         return productRepository.listProductsByPageModeAdmin(pageable);
     }
+
+    @Override
+    public List<Product> bestSellingProducts(int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        return productRepository.bestSellingProducts(pageable);
+    }
 }

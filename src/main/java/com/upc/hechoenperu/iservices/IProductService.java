@@ -23,4 +23,5 @@ public interface IProductService {
     List<ProductsByAverageRatingResponseDTO> findProductsByAverageRating();
     List<Product> listProductsByPageModeUser(int offset, int limit);
     List<ProductsByOffsetLimitResponseDTO> listProductsByPageModeAdmin(int offset, int limit);
+    List<Product> bestSellingProducts(int offset, int limit);
 }

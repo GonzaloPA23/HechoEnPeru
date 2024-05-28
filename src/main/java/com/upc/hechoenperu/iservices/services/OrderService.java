@@ -1,6 +1,5 @@
 package com.upc.hechoenperu.iservices.services;
 
-import com.upc.hechoenperu.dtos.response.BestSellingProductsResponseDTO;
 import com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByCategoryResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByRegionResponseDTO;
@@ -101,11 +100,5 @@ public class OrderService implements IOrderService {
     public List<OrderDetailsByOffsetLimitResponseDTO> listOrderDetailsByOrderId(Long id, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
         return orderDetailRepository.listOrderDetailsByOrderId(id, pageable);
-    }
-
-    @Override
-    public List<BestSellingProductsResponseDTO> bestSellingProducts(int offset, int limit) {
-        Pageable pageable = PageRequest.of(offset, limit);
-        return orderDetailRepository.bestSellingProducts(pageable);
     }
 }

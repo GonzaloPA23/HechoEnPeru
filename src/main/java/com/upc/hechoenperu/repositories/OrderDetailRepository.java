@@ -1,6 +1,5 @@
 package com.upc.hechoenperu.repositories;
 
-import com.upc.hechoenperu.dtos.response.BestSellingProductsResponseDTO;
 import com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByCategoryResponseDTO;
 import com.upc.hechoenperu.dtos.response.QuantityProductsByRegionResponseDTO;
@@ -42,16 +41,4 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
     @Query("SELECT NEW com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO (od.id, od.quantity, od.subTotal, p.id) FROM OrderDetail od JOIN od.product p WHERE od.order.id = :id")
     List<OrderDetailsByOffsetLimitResponseDTO> listOrderDetailsByOrderId(Long id, Pageable pageable);
-
-    //SELECT SUM(quantity) AS total, p.name, p.image, p.price, r.name  FROM order_details
-    //JOIN products p on p.id = order_details.products_id
-    //JOIN local_craftsmen lc on p.local_craftsmen_id = lc.id
-    //JOIN regions r on lc.regions_id = r.id
-    //GROUP BY p.name, p.image, p.price, r.name
-    //ORDER BY total DESC
-
-    @Query("SELECT NEW com.upc.hechoenperu.dtos.response.BestSellingProductsResponseDTO (SUM(od.quantity), p.name, p.image, p.price, r.name) FROM OrderDetail od JOIN od.product p JOIN p.localCraftsman lc JOIN lc.region r GROUP BY p.name, p.image, p.price, r.name ORDER BY SUM(od.quantity) DESC")
-    List<BestSellingProductsResponseDTO> bestSellingProducts(Pageable pageable);
-
-
 }

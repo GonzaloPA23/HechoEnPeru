@@ -124,15 +124,4 @@ public class OrderController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @Operation(summary = "List best selling products")
-    @GetMapping("/bestSellingProducts")
-    public ResponseEntity<?> bestSellingProducts(@Param("offset") int offset, @Param("limit") int limit){
-        try {
-            List<BestSellingProductsResponseDTO> bestSellingProductsResponseDTOS = orderService.bestSellingProducts(offset, limit);
-            return ResponseEntity.ok(bestSellingProductsResponseDTOS);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 }

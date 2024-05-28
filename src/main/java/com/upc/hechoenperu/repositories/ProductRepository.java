@@ -40,5 +40,11 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     // SELECT products.id,products.name, c.name, r.name, lc.full_name, price,stock,average_rating, products.enabled, availability  FROM products JOIN categories c on c.id = products.categories_id JOIN local_craftsmen lc on products.local_craftsmen_id = lc.id JOIN regions r on lc.regions_id = r.id OFFSET :offset LIMIT :limit;
     @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO(p.id, p.name, c.name, r.name, lc.fullName, p.price, p.stock, p.averageRating, p.enabled, p.availability) FROM Product p JOIN p.category c JOIN p.localCraftsman lc JOIN lc.region r")
     List<ProductsByOffsetLimitResponseDTO> listProductsByPageModeAdmin(Pageable pageable);
-
+    //SELECT p.*, SUM(od.quantity) as total_quantity
+    //FROM products p
+    //JOIN order_details od ON p.id = od.products_id
+    //GROUP BY p.id
+    //ORDER BY total_quantity DESC;
+    @Query("SELECT p FROM OrderDetail od JOIN od.product p GROUP BY p.id ORDER BY SUM(od.quantity) DESC")
+    List<Product> bestSellingProducts(Pageable pageable);
 }

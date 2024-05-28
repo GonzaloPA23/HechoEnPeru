@@ -266,4 +266,16 @@ public class ProductController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @Operation(summary = "List best selling products by page")
+    @GetMapping("/bestSellingProducts")
+    public ResponseEntity<?> bestSellingProducts(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+        try{
+            List<Product> products = productService.bestSellingProducts(offset, limit);
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
