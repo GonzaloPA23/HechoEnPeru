@@ -47,4 +47,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     //ORDER BY total_quantity DESC;
     @Query("SELECT p FROM OrderDetail od JOIN od.product p GROUP BY p.id ORDER BY SUM(od.quantity) DESC")
     List<Product> bestSellingProducts(Pageable pageable);
+    @Query("SELECT p FROM OrderDetail od JOIN od.product p GROUP BY p.id ORDER BY SUM(od.quantity) DESC")
+    List<Product> listBestSellingProducts();
 }

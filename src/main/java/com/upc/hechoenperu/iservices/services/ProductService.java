@@ -135,4 +135,9 @@ public class ProductService implements IProductService {
         Pageable pageable = PageRequest.of(offset, limit);
         return productRepository.bestSellingProducts(pageable);
     }
+
+    @Override
+    public List<Product> listBestSellingProducts() {
+        return productRepository.listBestSellingProducts();
+    }
 }
