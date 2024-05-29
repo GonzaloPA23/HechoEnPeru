@@ -17,5 +17,5 @@ public interface IUserService {
     JwtResponse login(String email, String password);
     void authenticate(String username, String password) throws Exception;
     User findUserById(Long id);
-    List<UserByOffsetLimitResponseDTO> listUsersByPageModeAdmin(int offset, int limit);
+    List<User> listUsersByPageModeAdmin(int offset, int limit);
 }

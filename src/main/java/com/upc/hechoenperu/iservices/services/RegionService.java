@@ -1,6 +1,5 @@
 package com.upc.hechoenperu.iservices.services;
 
-import com.upc.hechoenperu.dtos.response.RegionsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Region;
 import com.upc.hechoenperu.iservices.IRegionService;
 import com.upc.hechoenperu.repositories.RegionRepository;
@@ -59,7 +58,7 @@ public class RegionService implements IRegionService {
     }
 
     @Override
-    public List<RegionsByOffsetLimitResponseDTO> listRegionsByPageModeAdmin(int offset, int limit){
+    public List<Region> listRegionsByPageModeAdmin(int offset, int limit){
         Pageable pageable = PageRequest.of(offset, limit);
         return regionRepository.listRegionsByPageModeAdmin(pageable);
     }

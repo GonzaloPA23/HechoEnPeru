@@ -85,7 +85,8 @@ public class UserController {
     @GetMapping("/usersByPageModeAdmin")
     public ResponseEntity<?> listUsersByPageModeAdmin(@RequestParam int offset, @RequestParam int limit) {
         try {
-            List<UserByOffsetLimitResponseDTO> userDTOs = userService.listUsersByPageModeAdmin(offset, limit);
+            List<User> users = userService.listUsersByPageModeAdmin(offset, limit);
+            List<UserDTO> userDTOs = users.stream().map(user -> dtoConverter.convertToDto(user, UserDTO.class)).toList();
             return new ResponseEntity<>(userDTOs, HttpStatus.OK);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());

@@ -137,7 +137,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<UserByOffsetLimitResponseDTO> listUsersByPageModeAdmin(int offset, int limit) {
+    public List<User> listUsersByPageModeAdmin(int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
         return userRepository.listUsersByPageModeAdmin(pageable);
     }

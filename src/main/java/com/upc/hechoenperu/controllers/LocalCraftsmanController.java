@@ -148,8 +148,9 @@ public class LocalCraftsmanController {
     @GetMapping("/localCraftsmenByPageModeAdmin")
     public ResponseEntity<?> listLocalCraftsmanByPageModeAdmin(@RequestParam int offset, @RequestParam int limit){
         try{
-            List<LocalCraftsmenByOffsetLimitResponseDTO> localCraftsmenByOffsetLimitResponseDTOS = localCraftsmanService.listLocalCraftsmenByPageModeAdmin(offset, limit);
-            return new ResponseEntity<>(localCraftsmenByOffsetLimitResponseDTOS, HttpStatus.OK);
+            List<LocalCraftsman> localCraftsmen = localCraftsmanService.listLocalCraftsmenByPageModeAdmin(offset, limit);
+            List<LocalCraftsmanDTO> localCraftsmanDTOs = localCraftsmen.stream().map(localCraftsman -> dtoConverter.convertToDto(localCraftsman, LocalCraftsmanDTO.class)).toList();
+            return new ResponseEntity<>(localCraftsmanDTOs, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

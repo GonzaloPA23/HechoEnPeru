@@ -13,5 +13,5 @@ public interface ILocalCrastmanService {
     LocalCraftsman updateWithValidations(LocalCraftsman localCraftsman) throws Exception;
     void delete(Long id) throws Exception;
     List<LocalCraftsman> listLocalCraftsmenByPageModeUser(int offset, int limit);
-    List<LocalCraftsmenByOffsetLimitResponseDTO> listLocalCraftsmenByPageModeAdmin(int offset, int limit);
+    List<LocalCraftsman> listLocalCraftsmenByPageModeAdmin(int offset, int limit);
 }

@@ -159,7 +159,8 @@ public class RegionController {
     @GetMapping("/regionsByPageAdmin")
     public ResponseEntity<?> listRegionsByPageModeAdmin(@RequestParam int offset, @RequestParam int limit){
         try{
-            List<RegionsByOffsetLimitResponseDTO> regionDTOs = regionService.listRegionsByPageModeAdmin(offset, limit);
+            List<Region> regions = regionService.listRegionsByPageModeAdmin(offset, limit);
+            List<RegionDTO> regionDTOs = regions.stream().map(region -> dtoConverter.convertToDto(region, RegionDTO.class)).toList();
             return new ResponseEntity<>(regionDTOs, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -1,6 +1,5 @@
 package com.upc.hechoenperu.iservices;
 
-import com.upc.hechoenperu.dtos.response.RegionsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.Region;
 
 import java.util.List;
@@ -13,5 +12,5 @@ public interface IRegionService {
     void delete(Long id) throws Exception;
     List<Region> findAllByNameContaining(String name);
     List<Region> listRegionsByPageModeUser(int offset, int limit);
-    List<RegionsByOffsetLimitResponseDTO> listRegionsByPageModeAdmin(int offset, int limit);
+    List<Region> listRegionsByPageModeAdmin(int offset, int limit);
 }

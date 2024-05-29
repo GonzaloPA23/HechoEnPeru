@@ -69,7 +69,7 @@ public class LocalCraftsmanService implements ILocalCrastmanService {
     }
 
     @Override
-    public List<LocalCraftsmenByOffsetLimitResponseDTO> listLocalCraftsmenByPageModeAdmin(int offset, int limit){
+    public List<LocalCraftsman> listLocalCraftsmenByPageModeAdmin(int offset, int limit){
         Pageable pageable = PageRequest.of(offset, limit);
         return localCraftsmanRepository.listLocalCraftsmenByPageModeAdmin(pageable);
     }

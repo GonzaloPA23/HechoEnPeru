@@ -15,6 +15,6 @@ public interface LocalCraftsmanRepository extends JpaRepository<LocalCraftsman, 
     @Query("SELECT l FROM LocalCraftsman l WHERE l.enabled = true")
     List<LocalCraftsman> listLocalCraftsmenByPageModeUser(Pageable pageable);
     // SELECT local_craftsmen.id, full_name, specialty, experience, r.id, r.name, enabled  FROM local_craftsmen JOIN regions r on r.id = local_craftsmen.regions_id OFFSET :offset LIMIT :limit;
-    @Query("SELECT NEW com.upc.hechoenperu.dtos.response.LocalCraftsmenByOffsetLimitResponseDTO (l.id, l.fullName, l.specialty, l.experience, r.id, r.name, l.enabled) FROM LocalCraftsman l JOIN l.region r")
-    List<LocalCraftsmenByOffsetLimitResponseDTO> listLocalCraftsmenByPageModeAdmin(Pageable pageable);
+    @Query("SELECT l FROM LocalCraftsman l ORDER BY l.id ASC")
+    List<LocalCraftsman> listLocalCraftsmenByPageModeAdmin(Pageable pageable);
 }
