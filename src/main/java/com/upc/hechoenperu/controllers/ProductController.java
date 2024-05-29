@@ -260,8 +260,9 @@ public class ProductController {
     @GetMapping("/productsByPageModeAdmin")
     public ResponseEntity<?> listProductsByPageModeAdmin(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
         try{
-            List<ProductsByOffsetLimitResponseDTO> products = productService.listProductsByPageModeAdmin(offset, limit);
-            return new ResponseEntity<>(products, HttpStatus.OK);
+            List<Product> products = productService.listProductsByPageModeAdmin(offset, limit);
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

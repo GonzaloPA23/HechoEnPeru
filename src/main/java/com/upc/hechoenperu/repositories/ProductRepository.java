@@ -38,8 +38,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query("SELECT p FROM Product p WHERE p.availability = true AND p.enabled = true")
     List<Product> listProductsByPageModeUser(Pageable pageable);
     // SELECT products.id,products.name, c.name, r.name, lc.full_name, price,stock,average_rating, products.enabled, availability  FROM products JOIN categories c on c.id = products.categories_id JOIN local_craftsmen lc on products.local_craftsmen_id = lc.id JOIN regions r on lc.regions_id = r.id OFFSET :offset LIMIT :limit;
-    @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO(p.id, p.name, c.name, r.name, lc.fullName, p.price, p.stock, p.averageRating, p.enabled, p.availability) FROM Product p JOIN p.category c JOIN p.localCraftsman lc JOIN lc.region r")
-    List<ProductsByOffsetLimitResponseDTO> listProductsByPageModeAdmin(Pageable pageable);
+    @Query("SELECT p FROM Product p ORDER BY p.id ASC")
+    List<Product> listProductsByPageModeAdmin(Pageable pageable);
     //SELECT p.*, SUM(od.quantity) as total_quantity
     //FROM products p
     //JOIN order_details od ON p.id = od.products_id

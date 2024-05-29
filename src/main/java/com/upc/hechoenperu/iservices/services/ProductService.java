@@ -125,7 +125,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<ProductsByOffsetLimitResponseDTO> listProductsByPageModeAdmin(int offset, int limit) {
+    public List<Product> listProductsByPageModeAdmin(int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
         return productRepository.listProductsByPageModeAdmin(pageable);
     }
