@@ -155,4 +155,16 @@ public class LocalCraftsmanController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @Operation(summary = "List local craftsmen by region")
+    @GetMapping("/localCraftsmenByRegion/{id}")
+    public ResponseEntity<?> listLocalCraftsmenByRegion(@PathVariable Long id){
+        try{
+            List<LocalCraftsman> localCraftsmen = localCraftsmanService.listLocalCraftsmenByRegion(id);
+            List<LocalCraftsmanDTO> localCraftsmanDTOs = localCraftsmen.stream().map(localCraftsman -> dtoConverter.convertToDto(localCraftsman, LocalCraftsmanDTO.class)).toList();
+            return new ResponseEntity<>(localCraftsmanDTOs, HttpStatus.OK);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        }
 }

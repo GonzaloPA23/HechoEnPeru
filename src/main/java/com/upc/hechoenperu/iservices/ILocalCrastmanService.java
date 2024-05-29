@@ -14,4 +14,5 @@ public interface ILocalCrastmanService {
     void delete(Long id) throws Exception;
     List<LocalCraftsman> listLocalCraftsmenByPageModeUser(int offset, int limit);
     List<LocalCraftsman> listLocalCraftsmenByPageModeAdmin(int offset, int limit);
+    List<LocalCraftsman> listLocalCraftsmenByRegion(Long id);
 }

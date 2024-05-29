@@ -12,4 +12,6 @@ import java.util.List;
 public interface TouristSiteRepository extends JpaRepository<TouristSite, Long> {
     @Query("SELECT ts FROM TouristSite ts")
     List<TouristSite> listTouristSitesByPage(Pageable pageable);
+    @Query("SELECT t FROM TouristSite t JOIN t.region r WHERE r.id = :id")
+    List<TouristSite> listTouristSitesByRegion(Long id);
 }

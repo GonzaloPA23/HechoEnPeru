@@ -65,6 +65,11 @@ public class TouristSiteService implements ITouristSiteService {
         return touristSiteRepository.listTouristSitesByPage(pageable);
     }
 
+    @Override
+    public List<TouristSite> listTouristSitesByRegion(Long id){
+        return touristSiteRepository.listTouristSitesByRegion(id);
+    }
+
     public void Validations(TouristSite touristSite){
         Region region = regionRepository.findById(touristSite.getRegion().getId()).orElse(null);
         if(region == null){
