@@ -4,6 +4,7 @@ import com.upc.hechoenperu.dtos.UserDTO;
 import com.upc.hechoenperu.dtos.request.LoginUserRequestDTO;
 import com.upc.hechoenperu.dtos.request.RegisterUserRequestDTO;
 import com.upc.hechoenperu.dtos.response.JwtResponse;
+import com.upc.hechoenperu.dtos.response.UserLoginResponseDTO;
 import com.upc.hechoenperu.entities.User;
 import com.upc.hechoenperu.iservices.IUserService;
 import com.upc.hechoenperu.util.DTOConverter;
@@ -47,10 +48,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginUserRequestDTO request) {
         try{
+            UserLoginResponseDTO userLoginResponseDTO = new UserLoginResponseDTO();
             JwtResponse jwtResponse = userService.login(request.getEmail(), request.getPassword());
+            User user = userService.findByEmail(request.getEmail());
+            userLoginResponseDTO.setUser(user);
+            userLoginResponseDTO.setJwtResponse(jwtResponse);
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Authorization", jwtResponse.getJwttoken());
-            return ResponseEntity.ok().headers(responseHeaders).body(jwtResponse);
+            return ResponseEntity.ok().headers(responseHeaders).body(userLoginResponseDTO);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

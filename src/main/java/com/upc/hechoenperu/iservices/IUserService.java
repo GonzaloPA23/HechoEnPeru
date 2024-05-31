@@ -10,7 +10,6 @@ public interface IUserService {
     User insert(User user);
     List<User> list();
     User findByEmail(String email);
-    Boolean existsByEmail(String email);
     User update(User user) throws Exception;
     User searchId(Long id) throws Exception;
     void delete(Long id) throws Exception;

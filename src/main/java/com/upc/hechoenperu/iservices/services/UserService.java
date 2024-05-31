@@ -71,10 +71,6 @@ public class UserService implements IUserService {
         return userRepository.findByEmail(email);
     }
     @Override
-    public Boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
-    }
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public User update(User user) throws Exception {
         // If the user does not exist or is not enabled throw an exception
