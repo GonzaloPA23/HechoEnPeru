@@ -92,7 +92,7 @@ public class RegionController {
     @DeleteMapping("/region/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception{
         try {
-            uploadFileService.delete(regionService.searchId(id).getImage());
+            //uploadFileService.delete(regionService.searchId(id).getImage());
             regionService.delete(id);
             return new ResponseEntity<>("Region deleted", HttpStatus.OK);
         } catch (Exception e) {

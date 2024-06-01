@@ -95,7 +95,7 @@ public class LocalCraftsmanController {
     @DeleteMapping("/localCraftsmanDelete/{id}") // http://localhost:8080/api/localCraftsman/1
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
         try{
-            uploadFileService.delete(localCraftsmanService.searchId(id).getImage());
+            //uploadFileService.delete(localCraftsmanService.searchId(id).getImage());
             localCraftsmanService.delete(id);
             return new ResponseEntity<>("Local craftsman deleted", HttpStatus.OK);
         } catch (Exception e) {

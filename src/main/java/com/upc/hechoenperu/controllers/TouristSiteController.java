@@ -94,7 +94,7 @@ public class TouristSiteController {
     @DeleteMapping("/touristSite/{id}") // http://localhost:8080/api/touristSite/1
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
         try{
-            uploadFileService.delete(touristSiteService.searchId(id).getImage());
+            //uploadFileService.delete(touristSiteService.searchId(id).getImage());
             touristSiteService.delete(id);
             return new ResponseEntity<>("Tourist site deleted", HttpStatus.OK);
         } catch (Exception e) {
