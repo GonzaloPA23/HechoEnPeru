@@ -76,7 +76,8 @@ public class CommentService implements ICommentService {
 
     @Override
     public List<QuantityCommentsByRegionResponseDTO> quantityCommentsByRegion() {
-        return commentRepository.quantityCommentsByRegion();
+        Long getQuantityComments = commentRepository.getQuantityComments();
+        return commentRepository.quantityCommentsByRegion(getQuantityComments);
     }
 
     @Override

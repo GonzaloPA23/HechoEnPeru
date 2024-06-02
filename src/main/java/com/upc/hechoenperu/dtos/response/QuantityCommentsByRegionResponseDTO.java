@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QuantityCommentsByRegionResponseDTO {
     private String regionName;
-    private Long quantity;
+    private Double percentage;
 }
