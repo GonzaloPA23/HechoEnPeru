@@ -32,8 +32,25 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     // List products by average rating in descending order
     List<Product> findAllByOrderByAverageRatingDesc();
     //SELECT average_rating, name FROM products
-    @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByAverageRatingResponseDTO(p.averageRating, p.name) FROM Product p")
+    @Query("SELECT new com.upc.hechoenperu.dtos.response.ProductsByAverageRatingResponseDTO(" +
+            "CASE " +
+            "WHEN p.averageRating >= 0 AND p.averageRating < 1 THEN '[0 a 1[' " +
+            "WHEN p.averageRating >= 1 AND p.averageRating < 2 THEN '[1 a 2[' " +
+            "WHEN p.averageRating >= 2 AND p.averageRating < 3 THEN '[2 a 3[' " +
+            "WHEN p.averageRating >= 3 AND p.averageRating < 4 THEN '[3 a 4[' " +
+            "WHEN p.averageRating >= 4 AND p.averageRating <= 5 THEN '[4 a 5]' " +
+            "END, COUNT(p.id)) " +
+            "FROM Product p " +
+            "GROUP BY " +
+            "CASE " +
+            "WHEN p.averageRating >= 0 AND p.averageRating < 1 THEN '[0 a 1[' " +
+            "WHEN p.averageRating >= 1 AND p.averageRating < 2 THEN '[1 a 2[' " +
+            "WHEN p.averageRating >= 2 AND p.averageRating < 3 THEN '[2 a 3[' " +
+            "WHEN p.averageRating >= 3 AND p.averageRating < 4 THEN '[3 a 4[' " +
+            "WHEN p.averageRating >= 4 AND p.averageRating <= 5 THEN '[4 a 5]' " +
+            "END")
     List<ProductsByAverageRatingResponseDTO> findProductsByAverageRating();
+
     //SELECT * FROM products WHERE availability = true AND enabled = true OFFSET :offset LIMIT :limit
     @Query("SELECT p FROM Product p WHERE p.availability = true AND p.enabled = true")
     List<Product> listProductsByPageModeUser(Pageable pageable);

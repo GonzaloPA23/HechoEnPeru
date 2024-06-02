@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductsByAverageRatingResponseDTO {
-    private Float averageRating;
-    private String name;
+    private String rangeAverageRating;
+    private Long quantity;
 }

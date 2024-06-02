@@ -1,7 +1,6 @@
 package com.upc.hechoenperu.iservices.services;
 
 import com.upc.hechoenperu.dtos.response.ProductsByAverageRatingResponseDTO;
-import com.upc.hechoenperu.dtos.response.ProductsByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.LocalCraftsman;
 import com.upc.hechoenperu.entities.Product;
 import com.upc.hechoenperu.iservices.IProductService;
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -30,7 +31,7 @@ public class ProductService implements IProductService {
         if (localCraftsman == null || !localCraftsman.getEnabled()) {
             throw new IllegalArgumentException("The local craftsman does not exist or is not active");
         }
-        // setear el averageRating de null a 0
+        // set el averageRating de null a 0
         product.setAverageRating(0f);
         return productRepository.save(product);
     }
@@ -60,7 +61,7 @@ public class ProductService implements IProductService {
         if (localCraftsman == null || !localCraftsman.getEnabled()) {
             throw new IllegalArgumentException("The local craftsman does not exist or is not active");
         }
-        // si el producto no tiene un averageRating, se setea a 0 pero si ya tiene un valor, se mantiene el mismo
+        // si el producto no tiene un averageRating, se modifica a 0 pero si ya tiene un valor, se mantiene el mismo
         if (product.getAverageRating() == null) {
             product.setAverageRating(0f);
         }
@@ -115,7 +116,28 @@ public class ProductService implements IProductService {
 
     @Override
     public List<ProductsByAverageRatingResponseDTO> findProductsByAverageRating() {
-        return productRepository.findProductsByAverageRating();
+        List<ProductsByAverageRatingResponseDTO> results = productRepository.findProductsByAverageRating();
+
+        // Definir los rangos posibles
+        List<String> ranges = Arrays.asList("[0 a 1[", "[1 a 2[", "[2 a 3[", "[3 a 4[", "[4 a 5]");
+
+        // Completar los resultados faltantes
+        List<ProductsByAverageRatingResponseDTO> completeResults = new ArrayList<>();
+        for (String range : ranges) {
+            boolean found = false;
+            for (ProductsByAverageRatingResponseDTO result : results) {
+                if (result.getRangeAverageRating().equals(range)) {
+                    completeResults.add(result);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                completeResults.add(new ProductsByAverageRatingResponseDTO(range, 0L));
+            }
+        }
+
+        return completeResults;
     }
 
     @Override
