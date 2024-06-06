@@ -79,6 +79,11 @@ public class LocalCraftsmanService implements ILocalCrastmanService {
         return localCraftsmanRepository.listLocalCraftsmenByRegion(id);
     }
 
+    @Override
+    public List<LocalCraftsman> listLocalCraftsmenByEnabledTrue(){
+        return localCraftsmanRepository.listLocalCraftsmenByEnabledTrue();
+    }
+
     public void validations(LocalCraftsman localCraftsman){
         // si la region no existe, se lanza una excepcion
         Region region = regionRepository.findById(localCraftsman.getRegion().getId()).orElse(null);

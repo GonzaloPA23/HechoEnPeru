@@ -167,5 +167,17 @@ public class LocalCraftsmanController {
         }catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @Operation(summary = "List local craftsmen by enabled true")
+    @GetMapping("/localCraftsmenByEnabledTrue")
+    public ResponseEntity<?> listLocalCraftsmenByEnabledTrue(){
+        try{
+            List<LocalCraftsman> localCraftsmen = localCraftsmanService.listLocalCraftsmenByEnabledTrue();
+            List<LocalCraftsmanDTO> localCraftsmanDTOs = localCraftsmen.stream().map(localCraftsman -> dtoConverter.convertToDto(localCraftsman, LocalCraftsmanDTO.class)).toList();
+            return new ResponseEntity<>(localCraftsmanDTOs, HttpStatus.OK);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
 }

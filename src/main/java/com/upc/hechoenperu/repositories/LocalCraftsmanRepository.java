@@ -20,4 +20,6 @@ public interface LocalCraftsmanRepository extends JpaRepository<LocalCraftsman, 
     // SELECT * FROM local_craftsmen JOIN regions r on r.id = local_craftsmen.regions_id WHERE r.id = :id;
     @Query("SELECT l FROM LocalCraftsman l JOIN l.region r WHERE r.id = :id")
     List<LocalCraftsman> listLocalCraftsmenByRegion(Long id);
+    @Query("SELECT l FROM LocalCraftsman l WHERE l.enabled = true")
+    List<LocalCraftsman> listLocalCraftsmenByEnabledTrue();
 }

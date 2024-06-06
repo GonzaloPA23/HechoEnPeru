@@ -15,4 +15,5 @@ public interface ILocalCrastmanService {
     List<LocalCraftsman> listLocalCraftsmenByPageModeUser(int offset, int limit);
     List<LocalCraftsman> listLocalCraftsmenByPageModeAdmin(int offset, int limit);
     List<LocalCraftsman> listLocalCraftsmenByRegion(Long id);
+    List<LocalCraftsman> listLocalCraftsmenByEnabledTrue();
 }
