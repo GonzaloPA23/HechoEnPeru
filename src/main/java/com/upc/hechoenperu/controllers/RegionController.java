@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +35,9 @@ public class RegionController {
     // Method Create Region
     //@PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Create a new region")
-    @PostMapping("/region")
-    public ResponseEntity<?> insert(@ModelAttribute("regionDTO") RegionDTO regionDTO,
-                                            @RequestParam("file")MultipartFile image) throws Exception{
+    @PostMapping(value = {"/region"},consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // consumes = {"multipart/form-data"} probar
+    public ResponseEntity<?> insert(@RequestPart("regionDTO") RegionDTO regionDTO,
+                                            @RequestPart("file")MultipartFile image) throws Exception{
         try{
             Region region = dtoConverter.convertToEntity(regionDTO,Region.class);
             region = regionService.insert(region);
@@ -67,9 +68,9 @@ public class RegionController {
     //Method Update Region
     //@PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Update a region by id")
-    @PutMapping("/region/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute RegionDTO regionDTO,
-                                            @RequestParam("file")MultipartFile image) throws Exception {
+    @PutMapping(value = {"/region/{id}"},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestPart RegionDTO regionDTO,
+                                            @RequestPart("file")MultipartFile image) throws Exception {
         try{
             Region region = regionService.searchId(id);
             Region updateRegion = dtoConverter.convertToEntity(regionDTO, Region.class);

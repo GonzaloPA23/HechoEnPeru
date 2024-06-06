@@ -38,7 +38,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> list() {
-        return productRepository.findAll();
+        return productRepository.findAllProductsByEnabledAndAvailabilityTrue();
     }
 
     @Override

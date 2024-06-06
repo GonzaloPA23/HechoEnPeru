@@ -14,6 +14,8 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>{
+    @Query("SELECT p FROM Product p WHERE p.availability = true AND p.enabled = true")
+    List<Product> findAllProductsByEnabledAndAvailabilityTrue();
     // List products by price range
     List<Product> findByPriceBetween(BigDecimal startPrice, BigDecimal endPrice);
     // SELECT * FROM products JOIN categories c on c.id = products.categories_id WHERE categories_id = 2;

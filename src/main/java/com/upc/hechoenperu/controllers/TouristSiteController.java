@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +34,9 @@ public class TouristSiteController {
     // Method Create Tourist Site
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Create a new tourist site")
-    @PostMapping("/touristSite")
-    public ResponseEntity<?> insert(@ModelAttribute("touristSiteDTO") TouristSiteDTO touristSiteDTO,
-                                                 @RequestParam("file") MultipartFile image) throws Exception{
+    @PostMapping(value = {"/touristSite"},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> insert(@RequestPart("touristSiteDTO") TouristSiteDTO touristSiteDTO,
+                                                 @RequestPart("file") MultipartFile image) throws Exception{
         try {
             TouristSite touristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);
             touristSite = touristSiteService.insert(touristSite);
@@ -66,9 +67,9 @@ public class TouristSiteController {
     //Method Update Tourist Site
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Update a tourist site by id")
-    @PutMapping("/touristSite/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute TouristSiteDTO touristSiteDTO,
-                                                 @RequestParam("file") MultipartFile image) throws Exception {
+    @PutMapping(value = {"/touristSite/{id}"},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestPart TouristSiteDTO touristSiteDTO,
+                                                 @RequestPart("file") MultipartFile image) throws Exception {
         try {
             TouristSite touristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);
             TouristSite updateTouristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);

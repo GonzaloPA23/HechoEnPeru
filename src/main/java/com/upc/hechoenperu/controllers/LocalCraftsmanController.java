@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +35,9 @@ public class LocalCraftsmanController {
     // Method Create Local Craftsman
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Create a new local craftsman")
-    @PostMapping("/localCraftsman") // http://localhost:8080/api/localCraftsman
-    public ResponseEntity<?> insert (@ModelAttribute("localCraftsmanDTO") LocalCraftsmanDTO localCraftsmanDTO,
-                                                     @RequestParam("file") MultipartFile image) throws Exception {
+    @PostMapping(value = {"/localCraftsman"},consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}) // http://localhost:8080/api/localCraftsman
+    public ResponseEntity<?> insert (@RequestPart("localCraftsmanDTO") LocalCraftsmanDTO localCraftsmanDTO,
+                                                     @RequestPart("file") MultipartFile image) throws Exception {
 
         try {
             LocalCraftsman localCraftsman = dtoConverter.convertToEntity(localCraftsmanDTO, LocalCraftsman.class);
@@ -67,9 +68,9 @@ public class LocalCraftsmanController {
     //Method Update Local Craftsman
     @Operation(summary = "Update a local craftsman by id")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/localCraftsman/{id}") // http://localhost:8080/api/localCraftsman/1
-    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute LocalCraftsmanDTO localCraftsmanDTO,
-                                                    @RequestParam("file") MultipartFile image) throws Exception {
+    @PutMapping(value = {"/localCraftsman/{id}"}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // http://localhost:8080/api/localCraftsman/1
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestPart LocalCraftsmanDTO localCraftsmanDTO,
+                                                    @RequestPart("file") MultipartFile image) throws Exception {
         try{
             LocalCraftsman localCraftsman = localCraftsmanService.searchId(id);
             LocalCraftsman updateLocalCraftsman = dtoConverter.convertToEntity(localCraftsmanDTO, LocalCraftsman.class);

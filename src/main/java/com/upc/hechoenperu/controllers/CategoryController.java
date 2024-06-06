@@ -66,4 +66,17 @@ public class CategoryController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // Method Get by id
+    @Operation(summary = "Search a category by id")
+    @GetMapping("/category/{id}")
+    public ResponseEntity<?> searchId(@PathVariable Long id) throws Exception {
+        try{
+            Category category = categoryService.searchId(id);
+            CategoryDTO categoryDTO = dtoConverter.convertToDto(category, CategoryDTO.class);
+            return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

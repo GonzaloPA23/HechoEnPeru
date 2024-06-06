@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,9 +37,9 @@ public class ProductController {
     //Method Create Product
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Create a new product")
-    @PostMapping("/product")
-    public ResponseEntity<?> insert(@ModelAttribute("productDTO") ProductDTO productDTO,
-                                             @RequestParam("file") MultipartFile image) throws Exception {
+    @PostMapping(value={"/product"}, consumes={MediaType.MULTIPART_FORM_DATA_VALUE} )
+    public ResponseEntity<?> insert(@RequestPart("productDTO") ProductDTO productDTO,
+                                    @RequestPart("file") MultipartFile image) throws Exception {
         try {
             Product product = dtoConverter.convertToEntity(productDTO, Product.class);
             product = productService.insert(product);
@@ -70,9 +71,9 @@ public class ProductController {
     //Method Update Product
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Update a product by id")
-    @PutMapping("/product/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute ProductDTO productDTO,
-                                    @RequestParam("file") MultipartFile image) throws Exception {
+    @PutMapping(value = {"/product/{id}"},consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}) // value={"/product"}, consumes={MediaType.MULTIPART_FORM_DATA_VALUE}
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestPart ProductDTO productDTO,
+                                    @RequestPart("file") MultipartFile image) throws Exception {
         try {
             // Busca el producto existente
             Product product = productService.searchId(id);
