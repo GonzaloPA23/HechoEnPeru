@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -72,18 +73,30 @@ public class UserService implements IUserService {
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public User update(User user) throws Exception {
-        // If the user does not exist or is not enabled throw an exception
-        if (userRepository.findById(user.getId()).isEmpty() || !userRepository.findById(user.getId()).get().getEnabled()) {
+    public User update(User user, String currentPassword, String newPassword) throws Exception {
+        Optional<User> existingUserOptional = userRepository.findById(user.getId());
+        if (existingUserOptional.isEmpty() || !existingUserOptional.get().getEnabled()) {
             throw new IllegalArgumentException("User " + user.getId() + " not found");
         }
-        // Update the name, last name and password
-        User userUpdate = searchId(user.getId());
-        userUpdate.setName(user.getName());
-        userUpdate.setLastName(user.getLastName());
-        userUpdate.setPassword(bcrypt.encode(user.getPassword()));
-        return userRepository.save(userUpdate);
+
+        User existingUser = existingUserOptional.get();
+
+        // Check if passwords are provided and match
+        if (currentPassword != null && !currentPassword.isBlank() &&
+                newPassword != null && !newPassword.isBlank()) {
+            if (!bcrypt.matches(currentPassword, existingUser.getPassword())) {
+                throw new IllegalArgumentException("Current password is incorrect");
+            }
+            existingUser.setPassword(bcrypt.encode(newPassword));
+        }
+
+        // Update the name and last name
+        existingUser.setName(user.getName());
+        existingUser.setLastName(user.getLastName());
+
+        return userRepository.save(existingUser);
     }
+
     @Override
     public User searchId(Long id) throws Exception {
         return userRepository.findById(id).orElseThrow(() -> new Exception("User not found"));
