@@ -103,8 +103,9 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> listOrdersByUserId(Long userId, int offset, int limit) {
+    public List<OrderDetail> listOrderDetailByUserId(Long userId, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
-        return orderRepository.listOrdersByUserId(userId, pageable);
+        return orderDetailRepository.listOrderDetailByUserId(userId, pageable);
     }
+
 }

@@ -41,4 +41,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
     @Query("SELECT NEW com.upc.hechoenperu.dtos.response.OrderDetailsByOffsetLimitResponseDTO (od.id, od.quantity, od.subTotal, p.id) FROM OrderDetail od JOIN od.product p WHERE od.order.id = :id")
     List<OrderDetailsByOffsetLimitResponseDTO> listOrderDetailsByOrderId(Long id, Pageable pageable);
+
+    @Query("SELECT od FROM OrderDetail od JOIN od.order o WHERE o.user.id = :userId")
+    List<OrderDetail> listOrderDetailByUserId(Long userId, Pageable pageable);
+
 }

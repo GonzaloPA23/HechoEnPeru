@@ -27,8 +27,6 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private DTOConverter dtoConverter;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
     @PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "Create a new order")
@@ -125,12 +123,13 @@ public class OrderController {
         }
     }
 
-    @Operation(summary = "List all orders by user id")
-    @GetMapping("/ordersByUserId")
-    public ResponseEntity<?> listOrdersByUserId(@Param("userId") Long userId, @Param("offset") int offset, @Param("limit") int limit){
+    @Operation(summary = "List all order details by user id")
+    @GetMapping("/orderDetailByUserId")
+    public ResponseEntity<?> listOrderDetailByUserId(@Param("userId") Long userId, @Param("offset") int offset, @Param("limit") int limit){
         try {
-            List<Order> orders = orderService.listOrdersByUserId(userId, offset, limit);
-            return ResponseEntity.ok(orders);
+            List<OrderDetail> orderDetails = orderService.listOrderDetailByUserId(userId, offset, limit);
+            List<OrderDetailsResponseDTO> orderDetailsResponseDTOS = orderDetails.stream().map(orderDetail -> dtoConverter.convertToDto(orderDetail, OrderDetailsResponseDTO.class)).toList();
+            return ResponseEntity.ok(orderDetailsResponseDTOS);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
