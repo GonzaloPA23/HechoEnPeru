@@ -26,7 +26,7 @@ public class UserController {
     @Autowired
     private DTOConverter dtoConverter;
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "List all users")
     @GetMapping("/users")
     public ResponseEntity<?> list() {

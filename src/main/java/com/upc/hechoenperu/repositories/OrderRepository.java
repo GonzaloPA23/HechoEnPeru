@@ -15,4 +15,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     // value = "SELECT * FROM orders OFFSET :offset LIMIT :limit", nativeQuery = true
     @Query("SELECT o FROM Order o")
     List<Order> listOrdersByPageModeAdmin(Pageable pageable);
+    List<Order> listOrdersByUserId(Long userId, Pageable pageable);
 }

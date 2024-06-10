@@ -33,7 +33,7 @@ public class RegionController {
     private DTOConverter dtoConverter;
 
     // Method Create Region
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Create a new region")
     @PostMapping(value = {"/region"},consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // consumes = {"multipart/form-data"} probar
     public ResponseEntity<?> insert(@RequestPart("regionDTO") RegionDTO regionDTO,

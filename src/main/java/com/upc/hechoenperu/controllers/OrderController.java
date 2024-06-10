@@ -124,4 +124,15 @@ public class OrderController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @Operation(summary = "List all orders by user id")
+    @GetMapping("/ordersByUserId")
+    public ResponseEntity<?> listOrdersByUserId(@Param("userId") Long userId, @Param("offset") int offset, @Param("limit") int limit){
+        try {
+            List<Order> orders = orderService.listOrdersByUserId(userId, offset, limit);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

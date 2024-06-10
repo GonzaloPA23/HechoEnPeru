@@ -76,4 +76,10 @@ public class TouristSiteService implements ITouristSiteService {
             throw new IllegalArgumentException("Region not found");
         }
     }
+
+    @Override
+    public List<TouristSite> listTouristSitesByRegionId(Long regionId, int offset, int limit){
+        Pageable pageable = PageRequest.of(offset, limit);
+        return touristSiteRepository.listTouristSitesByRegionId(regionId, pageable);
+    }
 }
