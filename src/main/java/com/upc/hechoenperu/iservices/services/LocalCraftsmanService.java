@@ -25,6 +25,7 @@ public class LocalCraftsmanService implements ILocalCrastmanService {
     @Transactional(rollbackFor = Exception.class)
     public LocalCraftsman insert(LocalCraftsman localCraftsman){
         validations(localCraftsman);
+        localCraftsman.setEnabled(true);
         return localCraftsmanRepository.save(localCraftsman);
     }
     // List all local craftsmen
