@@ -19,6 +19,6 @@ public class LocalCraftsmanDTO {
     private String specialty;
     private String image;
     private String experience;
-    private Boolean enabled;
+    private Boolean enabled = true;
     private Region region;
 }

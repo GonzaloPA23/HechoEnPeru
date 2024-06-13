@@ -42,6 +42,10 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public List<Product> listAll() {
+        return productRepository.findAll();
+    }
+    @Override
     public Product searchId(Long id) throws Exception {
         return productRepository.findById(id).orElseThrow(() -> new Exception("Product not found"));
     }

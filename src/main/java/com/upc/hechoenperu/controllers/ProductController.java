@@ -68,6 +68,18 @@ public class ProductController {
         }
     }
 
+    @Operation(summary = "List all products")
+    @GetMapping("/productsAdmin")
+    public ResponseEntity<?> listAll(){
+        try{
+            List<Product> products = productService.listAll();
+            List<ProductDTO> productDTOs = products.stream().map(product -> dtoConverter.convertToDto(product, ProductDTO.class)).toList();
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     //Method Update Product
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Update a product by id")

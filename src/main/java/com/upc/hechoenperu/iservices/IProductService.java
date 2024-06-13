@@ -10,6 +10,7 @@ import java.util.List;
 public interface IProductService {
     Product insert(Product product);
     List<Product> list();
+    List<Product> listAll();
     Product searchId(Long id) throws Exception;
     Product update(Product product) throws Exception;
     Product updateProductWithValidations(Product product) throws Exception;
