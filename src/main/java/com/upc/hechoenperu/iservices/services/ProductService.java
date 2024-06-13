@@ -43,7 +43,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> listAll() {
-        return productRepository.findAll();
+        return productRepository.findAllOrderByIdAsc();
     }
     @Override
     public Product searchId(Long id) throws Exception {
