@@ -14,4 +14,5 @@ public interface ITouristSiteService {
     List<TouristSite> listTouristSitesByPage(int offset, int limit);
     List<TouristSite> listTouristSitesByRegion(Long id);
     List<TouristSite> listTouristSitesByRegionId(Long regionId, int offset, int limit);
+    List<TouristSite> listAllTouristSitesByRegionId(Long regionId);
 }

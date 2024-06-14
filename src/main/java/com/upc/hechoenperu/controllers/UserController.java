@@ -1,7 +1,6 @@
 package com.upc.hechoenperu.controllers;
 import com.upc.hechoenperu.dtos.UserDTO;
 import com.upc.hechoenperu.dtos.request.UpdateProfileRequestDTO;
-import com.upc.hechoenperu.dtos.response.UserByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.User;
 import com.upc.hechoenperu.iservices.IUserService;
 import com.upc.hechoenperu.util.DTOConverter;

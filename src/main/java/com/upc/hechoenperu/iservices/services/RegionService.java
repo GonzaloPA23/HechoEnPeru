@@ -62,4 +62,9 @@ public class RegionService implements IRegionService {
         Pageable pageable = PageRequest.of(offset, limit);
         return regionRepository.listRegionsByPageModeAdmin(pageable);
     }
+
+    @Override
+    public List<Region> listAllRegions(){
+        return regionRepository.listAllRegions();
+    }
 }

@@ -151,4 +151,15 @@ public class TouristSiteController {
         }
     }
 
+    @Operation(summary = "List all tourist sites by region id")
+    @GetMapping("/allTouristSitesByRegionId")
+    public ResponseEntity<?> listAllTouristSitesByRegionId(@RequestParam Long regionId){
+        try {
+            List<TouristSite> touristSites = touristSiteService.listAllTouristSitesByRegionId(regionId);
+            List<TouristSiteDTO> touristSiteDTOs = touristSites.stream().map(touristSite -> dtoConverter.convertToDto(touristSite, TouristSiteDTO.class)).toList();
+            return new ResponseEntity<>(touristSiteDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

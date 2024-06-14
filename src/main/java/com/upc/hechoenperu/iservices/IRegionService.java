@@ -13,4 +13,5 @@ public interface IRegionService {
     List<Region> findAllByNameContaining(String name);
     List<Region> listRegionsByPageModeUser(int offset, int limit);
     List<Region> listRegionsByPageModeAdmin(int offset, int limit);
+    List<Region> listAllRegions();
 }

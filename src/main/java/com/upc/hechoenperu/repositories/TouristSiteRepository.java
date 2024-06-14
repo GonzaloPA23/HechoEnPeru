@@ -16,4 +16,6 @@ public interface TouristSiteRepository extends JpaRepository<TouristSite, Long> 
     List<TouristSite> listTouristSitesByRegion(Long id);
     @Query("SELECT ts FROM TouristSite ts WHERE ts.region.id = :regionId")
     List<TouristSite> listTouristSitesByRegionId(Long regionId, Pageable pageable);
+    @Query("SELECT ts FROM TouristSite ts WHERE ts.region.id = :regionId ORDER BY ts.id ASC")
+    List<TouristSite> listAllTouristSitesByRegionId(Long regionId);
 }

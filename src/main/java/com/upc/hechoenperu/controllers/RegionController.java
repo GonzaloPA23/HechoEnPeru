@@ -167,4 +167,16 @@ public class RegionController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @Operation(summary = "List all regions")
+    @GetMapping("/allRegions")
+    public ResponseEntity<?> listAllRegions(){
+        try{
+            List<Region> regions = regionService.listAllRegions();
+            List<RegionDTO> regionDTOs = regions.stream().map(region -> dtoConverter.convertToDto(region, RegionDTO.class)).toList();
+            return new ResponseEntity<>(regionDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

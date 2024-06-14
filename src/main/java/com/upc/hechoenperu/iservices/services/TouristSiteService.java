@@ -82,4 +82,9 @@ public class TouristSiteService implements ITouristSiteService {
         Pageable pageable = PageRequest.of(offset, limit);
         return touristSiteRepository.listTouristSitesByRegionId(regionId, pageable);
     }
+
+    @Override
+    public List<TouristSite> listAllTouristSitesByRegionId(Long regionId){
+        return touristSiteRepository.listAllTouristSitesByRegionId(regionId);
+    }
 }

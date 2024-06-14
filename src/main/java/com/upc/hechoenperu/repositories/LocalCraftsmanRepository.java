@@ -17,6 +17,8 @@ public interface LocalCraftsmanRepository extends JpaRepository<LocalCraftsman, 
     // SELECT local_craftsmen.id, full_name, specialty, experience, r.id, r.name, enabled  FROM local_craftsmen JOIN regions r on r.id = local_craftsmen.regions_id OFFSET :offset LIMIT :limit;
     @Query("SELECT l FROM LocalCraftsman l ORDER BY l.id ASC")
     List<LocalCraftsman> listLocalCraftsmenByPageModeAdmin(Pageable pageable);
+    @Query("SELECT l FROM LocalCraftsman l ORDER BY l.id ASC")
+    List<LocalCraftsman> listAllLocalCraftsmen();
     // SELECT * FROM local_craftsmen JOIN regions r on r.id = local_craftsmen.regions_id WHERE r.id = :id;
     @Query("SELECT l FROM LocalCraftsman l JOIN l.region r WHERE r.id = :id")
     List<LocalCraftsman> listLocalCraftsmenByRegion(Long id);

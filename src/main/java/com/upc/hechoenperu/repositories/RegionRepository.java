@@ -19,4 +19,6 @@ public interface RegionRepository extends JpaRepository<Region, Long> {
     //SELECT id,name,history FROM regions OFFSET :offset LIMIT :limit
     @Query("SELECT r FROM Region r ORDER BY r.id ASC")
     List<Region> listRegionsByPageModeAdmin(Pageable pageable);
+    @Query("SELECT r FROM Region r ORDER BY r.id ASC")
+    List<Region> listAllRegions();
 }

@@ -1,7 +1,6 @@
 package com.upc.hechoenperu.controllers;
 
 import com.upc.hechoenperu.dtos.LocalCraftsmanDTO;
-import com.upc.hechoenperu.dtos.response.LocalCraftsmenByOffsetLimitResponseDTO;
 import com.upc.hechoenperu.entities.LocalCraftsman;
 import com.upc.hechoenperu.iservices.ILocalCrastmanService;
 import com.upc.hechoenperu.iservices.IUploadFileService;
@@ -157,6 +156,18 @@ public class LocalCraftsmanController {
         }
     }
 
+    @Operation(summary = "List all local craftsmen")
+    @GetMapping("/AllLocalCraftsmen")
+    public ResponseEntity<?> listAll(){
+        try{
+            List<LocalCraftsman> localCraftsmen = localCraftsmanService.list();
+            List<LocalCraftsmanDTO> localCraftsmanDTOs = localCraftsmen.stream().map(localCraftsman -> dtoConverter.convertToDto(localCraftsman, LocalCraftsmanDTO.class)).toList();
+            return new ResponseEntity<>(localCraftsmanDTOs, HttpStatus.OK);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @Operation(summary = "List local craftsmen by region")
     @GetMapping("/localCraftsmenByRegion/{id}")
     public ResponseEntity<?> listLocalCraftsmenByRegion(@PathVariable Long id){
@@ -180,4 +191,5 @@ public class LocalCraftsmanController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 }
