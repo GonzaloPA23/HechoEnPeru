@@ -6,7 +6,6 @@ import com.upc.hechoenperu.dtos.response.*;
 import com.upc.hechoenperu.entities.Order;
 import com.upc.hechoenperu.entities.OrderDetail;
 import com.upc.hechoenperu.iservices.services.OrderService;
-import com.upc.hechoenperu.security.JwtTokenUtil;
 import com.upc.hechoenperu.util.DTOConverter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -128,6 +127,18 @@ public class OrderController {
     public ResponseEntity<?> listOrderDetailByUserId(@Param("userId") Long userId, @Param("offset") int offset, @Param("limit") int limit){
         try {
             List<OrderDetail> orderDetails = orderService.listOrderDetailByUserId(userId, offset, limit);
+            List<OrderDetailsResponseDTO> orderDetailsResponseDTOS = orderDetails.stream().map(orderDetail -> dtoConverter.convertToDto(orderDetail, OrderDetailsResponseDTO.class)).toList();
+            return ResponseEntity.ok(orderDetailsResponseDTOS);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "List all order details by user id")
+    @GetMapping("/allOrderDetailsByUserId")
+    public ResponseEntity<?> listAllOrderDetailByUserId(@Param("userId") Long userId){
+        try {
+            List<OrderDetail> orderDetails = orderService.listAllOrderDetailsByUserId(userId);
             List<OrderDetailsResponseDTO> orderDetailsResponseDTOS = orderDetails.stream().map(orderDetail -> dtoConverter.convertToDto(orderDetail, OrderDetailsResponseDTO.class)).toList();
             return ResponseEntity.ok(orderDetailsResponseDTOS);
         } catch (Exception e) {

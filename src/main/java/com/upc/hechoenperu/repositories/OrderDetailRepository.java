@@ -45,4 +45,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     @Query("SELECT od FROM OrderDetail od JOIN od.order o WHERE o.user.id = :userId")
     List<OrderDetail> listOrderDetailByUserId(Long userId, Pageable pageable);
 
+    @Query("SELECT od FROM OrderDetail od JOIN od.order o WHERE o.user.id = :userId")
+    List<OrderDetail> listAllOrderDetailsByUserId(Long userId);
 }

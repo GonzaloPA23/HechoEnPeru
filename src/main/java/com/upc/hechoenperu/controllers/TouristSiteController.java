@@ -67,29 +67,26 @@ public class TouristSiteController {
     //Method Update Tourist Site
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Update a tourist site by id")
-    @PutMapping(value = {"/touristSite/{id}"},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = {"/touristSite/{id}"}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> update(@PathVariable Long id, @RequestPart TouristSiteDTO touristSiteDTO,
-                                                 @RequestPart("file") MultipartFile image) throws Exception {
+                                    @RequestPart("file") MultipartFile image) throws Exception {
         try {
-            TouristSite touristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);
-            TouristSite updateTouristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);
-            updateTouristSite.setId(touristSite.getId());
-
+            TouristSite touristSite = touristSiteService.searchId(id);
+            TouristSite updatedTouristSite = dtoConverter.convertToEntity(touristSiteDTO, TouristSite.class);
+            updatedTouristSite.setId(id);
             if (!image.isEmpty() && !touristSite.getImage().equals(image.getOriginalFilename())) {
                 uploadFileService.delete(touristSite.getImage());
                 String uniqueFilename = uploadFileService.copy(image);
-                updateTouristSite.setImage(uniqueFilename);
-            }else {
-                updateTouristSite.setImage(touristSite.getImage());
-            }
-            TouristSite validatedTouristSite = touristSiteService.update(updateTouristSite);
+                updatedTouristSite.setImage(uniqueFilename);
+            } else { updatedTouristSite.setImage(touristSite.getImage()); }
+            TouristSite validatedTouristSite = touristSiteService.update(updatedTouristSite);
             touristSiteDTO = dtoConverter.convertToDto(validatedTouristSite, TouristSiteDTO.class);
             return new ResponseEntity<>(touristSiteDTO, HttpStatus.OK);
-
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     //Method Delete Tourist Site
     @Operation(summary = "Delete a tourist site by id")
     @DeleteMapping("/touristSite/{id}") // http://localhost:8080/api/touristSite/1

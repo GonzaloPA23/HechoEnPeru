@@ -17,4 +17,5 @@ public interface IOrderService {
     List<Order> listOrdersByPageModeAdmin(int offset, int limit);
     List<OrderDetailsByOffsetLimitResponseDTO> listOrderDetailsByOrderId(Long id, int offset, int limit);
     List<OrderDetail> listOrderDetailByUserId(Long userId, int offset, int limit);
+    List<OrderDetail> listAllOrderDetailsByUserId(Long userId);
 }

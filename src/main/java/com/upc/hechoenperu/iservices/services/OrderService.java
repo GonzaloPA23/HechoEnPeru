@@ -108,4 +108,9 @@ public class OrderService implements IOrderService {
         return orderDetailRepository.listOrderDetailByUserId(userId, pageable);
     }
 
+    @Override
+    public List<OrderDetail> listAllOrderDetailsByUserId(Long userId){
+        return orderDetailRepository.listAllOrderDetailsByUserId(userId);
+    }
+
 }
