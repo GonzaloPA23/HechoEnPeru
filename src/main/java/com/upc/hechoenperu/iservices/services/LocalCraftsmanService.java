@@ -30,7 +30,7 @@ public class LocalCraftsmanService implements ILocalCrastmanService {
     // List all local craftsmen
     @Override
     public List<LocalCraftsman> list(){
-        return localCraftsmanRepository.findAll();
+        return localCraftsmanRepository.listLocalCraftsmenByEnabledTrue();
     }
     // Search a local craftsman by id
     @Override

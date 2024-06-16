@@ -160,7 +160,7 @@ public class LocalCraftsmanController {
     @GetMapping("/AllLocalCraftsmen")
     public ResponseEntity<?> listAll(){
         try{
-            List<LocalCraftsman> localCraftsmen = localCraftsmanService.list();
+            List<LocalCraftsman> localCraftsmen = localCraftsmanService.listAllLocalCraftsmen();
             List<LocalCraftsmanDTO> localCraftsmanDTOs = localCraftsmen.stream().map(localCraftsman -> dtoConverter.convertToDto(localCraftsman, LocalCraftsmanDTO.class)).toList();
             return new ResponseEntity<>(localCraftsmanDTOs, HttpStatus.OK);
         }catch (Exception e){
