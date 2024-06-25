@@ -21,6 +21,8 @@ services:
       - "6868:8080"
     volumes:
       - uploads_data:/app/uploads
+    networks:
+      - my-network-name
   db:
     image: postgres
     volumes:
@@ -33,6 +35,11 @@ services:
       - POSTGRES_DB=hechoenperu
     ports:
       - "5433:5432"
+    networks:
+      - my-network-name
 volumes:
   db_data:
   uploads_data:
+networks:
+  my-network-name:
+    name: springcloud
